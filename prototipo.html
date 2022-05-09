@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo JS</title>
+    <style>
+        canvas{
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <canvas id='display'></canvas>
+    <script>
+
+    //#region cod_original
+    let bordas, contexto, ALTURA, LARGURA
+
+    //#endregion
+    
+    //#region engine
+    function Controls() {
+        this.codes  = { 37: 'left', 38: 'forward', 40: 'backward' };
+        this.states = { 'left' : false, 'forward': false, 'backward': false };
+        document.addEventListener('keydown', this.onKey.bind(this, true), false);
+        document.addEventListener('keyup', this.onKey.bind(this, false), false);
+      }
+
+      Controls.prototype.onKey = function(val, e) {
+        var state = this.codes[e.keyCode];
+        if (typeof state === 'undefined') return;
+        this.states[state] = val;
+        e.preventDefault && e.preventDefault();
+        e.stopPropagation && e.stopPropagation();
+      };
+
+        function Player(x, y){
+            this.x = x;
+            this.y = y;
+        }
+
+        Player.prototype.update = function(controls,  seconds) {
+            if(controls.left) invert_gravity()
+            if (controls.forward) 
+                console.log("a")
+            if (controls.backward) 
+                console.log("b")
+                //this.walk(-3 * seconds, map);
+        };
+
+      function GameLoop() {
+        this.frame = this.frame.bind(this);
+        this.lastTime = 0;
+        this.callback = function() {};
+      }
+
+      GameLoop.prototype.start = function(callback) {
+        this.callback = callback;
+        requestAnimationFrame(this.frame);
+      };
+
+      GameLoop.prototype.frame = function(time) {
+        var seconds = (time - this.lastTime) / 1000;
+        this.lastTime = time;
+        if (seconds < 0.2) this.callback(seconds);
+        requestAnimationFrame(this.frame);
+      };
+
+      function Camera(canvas){
+            this.ALTURA = canvas.width = window.innerHeight;
+            this.LARGURA = canvas.height = window.innerWidth;
+            if (LARGURA >= 500){
+                LARGURA = 600
+                ALTURA = 600
+            }
+            cv = document.createElement("canvas");
+            cv.width = LARGURA
+            cv.height = ALTURA
+            cv.style.border = "1px solid #000";
+
+            this.ctx = canvas.getContext("2d")
+            document.body.appendChild(cv)
+      }
+
+      Camera.prototype.render = function(player, map){
+
+      }
+
+      var display = document.getElementById('display');
+      var player = new Player(1,1);
+      //var map = new Map(32);
+      var controls = new Controls();
+      let a = document.getElementById('display')
+      var camera = new Camera(a);
+      var loop = new GameLoop();
+
+      //map.randomize();
+      
+      loop.start(function frame(seconds) {
+        //map.update(seconds);
+        player.update(controls.states, seconds);
+        //camera.render(player);
+      });
+      //#endregion
+    </script>
+</body>
+</html>
