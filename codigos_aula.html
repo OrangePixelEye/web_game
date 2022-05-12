@@ -205,14 +205,14 @@
             document.addEventListener("keyup", solta)
             _addEventListener('keydown', document, input_teclado)
             //element.addEventListener("keydown", document, input_teclado);
-
+            
             rodar()
         }
 
         function rodar(){
             atualizar()
             desenhar()
-
+            
             contexto.fillStyle = "#238BF2"
             contexto.fillRect(0, 0, 100, ALTURA)
 
@@ -229,6 +229,7 @@
         
         function atualizar(){
             frames++
+            
             obstaculos.atualiza()
             bloco.atualizaBloco()
         }
