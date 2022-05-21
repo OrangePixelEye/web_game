@@ -44,9 +44,21 @@ class Player implements IDrawable{
         this.speed += this.gravity
         this.y += this.speed
         
-        if(this.y > 250 ){
-            this.y = 250 //- this.height
-            this.jump_count = 0
+        if(this.direction){
+            this.speed += this.gravity;
+            this.y += this.speed;
+            if (this.y > 250) {
+                this.y = 250; //- this.height
+                this.jump_count = 0;
+            }
+        }
+        else{
+            this.speed += this.gravity;
+            this.y -= this.speed;
+            if (this.y < 250) {
+                this.y = 250; //- this.height
+                this.jump_count = 0;
+            }
         }
     }
     draw() : void {
@@ -55,9 +67,7 @@ class Player implements IDrawable{
     }
 
     public jump(){
-
-        this.speed = -this.jump_force *  (this.direction? -1: 1)
-        
+        this.speed = -this.jump_force
     }
 
     private invert(){
