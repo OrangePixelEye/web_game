@@ -21,17 +21,28 @@ class Player {
         this.width = 50;
         this.height = 50;
         this.controls = control;
+        this.direction = true;
     }
     update() {
         if (this.controls.states.forward)
             this.jump();
-        if (this.controls.states.left)
-            this.invert();
-        this.speed += this.gravity;
-        this.y += this.speed;
-        if (this.y > 250) {
-            this.y = 250; //- this.height
-            this.jump_count = 0;
+        //if (this.controls.states.left)
+        //    this.invert();
+        if(this.direction){
+            this.speed += this.gravity;
+            this.y += this.speed;
+            if (this.y > 250) {
+                this.y = 250; //- this.height
+                this.jump_count = 0;
+            }
+        }
+        else{
+            this.speed += this.gravity;
+            this.y -= this.speed;
+            if (this.y < 250) {
+                this.y = 250; //- this.height
+                this.jump_count = 0;
+            }
         }
     }
     draw() {
@@ -39,7 +50,13 @@ class Player {
         this.ctx.fillRect(this.x, this.y, this.height, this.width);
     }
     jump() {
-        this.speed = -this.jump_force * (this.direction ? -1 : 1);
+        if(this.direction)
+        {
+            this.speed = -this.jump_force;
+        }
+        else{
+            this.speed = -this.jump_force;
+        }
     }
     invert() {
         this.direction = !this.direction;
