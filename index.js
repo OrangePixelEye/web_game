@@ -55,6 +55,7 @@ class ManipulateFile {
     createBlock() {
         return new Block();
     }
+    
 }
 class Controls {
     constructor() {
@@ -127,4 +128,17 @@ class Game {
 let gm = new Game();
 gm.player = new Player(gm.ctx, new Controls());
 gm.main();
+
+//let t = new ManipulateFile().readFile();
+var filePath = '/mapa.json';
+
+$.getJSON(filePath, function( data ) {
+  $.each( data, function( key, val ) {
+    console.log(val['country']);
+  });
+});
+
+$.get('map.txt', function(data) {
+    console.log(typeof(data) );
+ }, 'text');
 //# sourceMappingURL=index.js.map

@@ -4,8 +4,6 @@
  */
 // tsc -w no terminal para watch
 
-
-
 interface IDrawable{
     update() : void;
     draw() : void;
@@ -65,6 +63,9 @@ class Player implements IDrawable{
 }
 
 class Block implements IDrawable{
+    x : number;
+    y : number;
+    sprite : any; 
     update(): void {
         
     }
@@ -79,6 +80,7 @@ class ManipulateFile
     createBlock() : Block {
         return new Block();
     }
+
 }
 
 class Controls{
@@ -181,3 +183,15 @@ let gm = new Game();
 gm.player = new Player(gm.ctx, new Controls());
 
 gm.main()
+
+var filePath = '/mapa.json';
+
+$.getJSON(filePath, function( data ) {
+  $.each( data, function( key, val ) {
+    console.log(val['country']);
+  });
+});
+
+$.get('map.txt', function(data) {
+    console.log(typeof(data) );
+ }, 'text');
