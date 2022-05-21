@@ -80,7 +80,12 @@ class ManipulateFile
     createBlock() : Block {
         return new Block();
     }
-
+    convertTextToBlock(str : string) {
+        let temp = str.split('');
+        temp.map((v) => {
+            
+        })
+    }
 }
 
 class Controls{
@@ -183,15 +188,3 @@ let gm = new Game();
 gm.player = new Player(gm.ctx, new Controls());
 
 gm.main()
-
-var filePath = '/mapa.json';
-
-$.getJSON(filePath, function( data ) {
-  $.each( data, function( key, val ) {
-    console.log(val['country']);
-  });
-});
-
-$.get('map.txt', function(data) {
-    console.log(typeof(data) );
- }, 'text');

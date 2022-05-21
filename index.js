@@ -52,10 +52,20 @@ class Block {
     }
 }
 class ManipulateFile {
+    constructor()
+    {
+        this.block_types = new Map();
+    }
+    appendBlockType(str,  spr)
+    {
+        this.block_types.set(str, spr)
+    }
     createBlock() {
         return new Block();
     }
-    
+    convertTextToBlock(str) {
+        
+    }
 }
 class Controls {
     constructor() {
@@ -129,7 +139,7 @@ let gm = new Game();
 gm.player = new Player(gm.ctx, new Controls());
 gm.main();
 
-//let t = new ManipulateFile().readFile();
+let t = new ManipulateFile();
 var filePath = '/mapa.json';
 
 $.getJSON(filePath, function( data ) {
@@ -141,4 +151,6 @@ $.getJSON(filePath, function( data ) {
 $.get('map.txt', function(data) {
     console.log(typeof(data) );
  }, 'text');
+
+// read files w php
 //# sourceMappingURL=index.js.map
