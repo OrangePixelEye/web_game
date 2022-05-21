@@ -151,6 +151,11 @@ $.getJSON(filePath, function( data ) {
 $.get('map.txt', function(data) {
     console.log(typeof(data) );
  }, 'text');
-
+/*
+ fetch("manipule_files.php", { method: "POST", body: null })
+ .then(res => res.text())
+ .then((txt) => {
+   console.log(txt);
+ })*/
 // read files w php
 //# sourceMappingURL=index.js.map

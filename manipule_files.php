@@ -1,3 +1,14 @@
 <?php
-echo iterator_count(new DirectoryIterator('./sprites'));
+
+
+$dir = 'sprites/';
+$diretorio = dir($dir);
+$files = glob($dir);
+
+  
+
+while($arquivo = $diretorio -> read()){
+    $arquivoLocal = $dir.$arquivo;
+}
+
 ?>
