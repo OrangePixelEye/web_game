@@ -41,24 +41,13 @@ class Player implements IDrawable{
     update() : void {
         if (this.controls.states.forward) this.jump();
         if (this.controls.states.left) this.invert();
-        this.speed += this.gravity
-        this.y += this.speed
-        
-        if(this.direction){
-            this.speed += this.gravity;
-            this.y += this.speed;
-            if (this.y > 250) {
-                this.y = 250; //- this.height
-                this.jump_count = 0;
-            }
-        }
-        else{
-            this.speed += this.gravity;
-            this.y -= this.speed;
-            if (this.y < 250) {
-                this.y = 250; //- this.height
-                this.jump_count = 0;
-            }
+
+        this.speed += this.gravity;
+        this.y = (this.direction ? this.y + this.speed : this.y - this.speed)
+
+        if ((this.y > 250 && this.direction) || (this.y < 250 && !this.direction)) {
+            this.y = 250; //- this.height
+            this.jump_count = 0;
         }
     }
     draw() : void {
