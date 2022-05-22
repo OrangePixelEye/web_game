@@ -77,14 +77,19 @@ class Block implements IDrawable{
 
 class ManipulateFile
 {
+    block_types : Map<string, any>;
     createBlock() : Block {
         return new Block();
     }
-    convertTextToBlock(str : string) {
+    convertTextToBlock(str : string) : void{
         let temp = str.split('');
         temp.map((v) => {
             
         })
+    }
+    appendBlockType(str : string,  spr : any) : void
+    {
+        this.block_types.set(str, spr)
     }
 }
 
@@ -188,3 +193,16 @@ let gm = new Game();
 gm.player = new Player(gm.ctx, new Controls());
 
 gm.main()
+
+let t = new ManipulateFile();
+var filePath = '/mapa.json';
+
+$.getJSON(filePath, function( data ) {
+  $.each( data, function( key, val ) {
+    console.log(val['country']);
+  });
+});
+
+$.get('map.txt', function(data) {
+    console.log(typeof(data) );
+ }, 'text');
