@@ -9,6 +9,23 @@ var GameState;
     GameState[GameState["lose"] = 1] = "lose";
     GameState[GameState["ui"] = 2] = "ui";
 })(GameState || (GameState = {}));
+class MoveableDrawable {
+    constructor(c, x, y, w, h, color) {
+        this.ctx = c;
+        this.x = x;
+        this.y = y;
+        this.width = w;
+        this.height = h;
+        this.color = color;
+    }
+    update() {
+        this.x -= this.speed;
+    }
+    draw() {
+        this.ctx.fillStyle = this.color == undefined ? "#FFF" : this.color;
+        this.ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+}
 class Player {
     constructor(ctx, control) {
         this.jump_force = 23.6;
@@ -47,40 +64,18 @@ class Player {
         this.direction = !this.direction;
     }
 }
-class Block {
+class Obstacles extends MoveableDrawable {
     constructor(c, x, y, w, h, color) {
-        this.ctx = c;
-        this.x = x;
-        this.y = y;
-        this.width = w;
-        this.height = h;
-        this.color = "#" + color;
-    }
-    update() {
-    }
-    draw() {
-        this.ctx.fillStyle = this.color;
-        this.ctx.fillRect(this.x, this.y, this.width, this.height);
+        super(c, x, y, w, h);
     }
 }
-/*
-class ManipulateFile
-{
-    block_types : Map<string, any>;
-    createBlock() : Block {
-        return new Block();
+class GroundBlock extends MoveableDrawable {
+    constructor(c, x, y, w, h, color, s = 1) {
+        super(c, x, y, w, h);
+        this.color = "#" + color;
+        this.speed = s;
     }
-    convertTextToBlock(str : string) : void{
-        let temp = str.split('');
-        temp.map((v) => {
-            
-        })
-    }
-    appendBlockType(str : string,  spr : any) : void
-    {
-        this.block_types.set(str, spr)
-    }
-}*/
+}
 class Controls {
     constructor() {
         this.codes = { 37: 'left', 38: 'forward', 40: 'backward' };
@@ -107,7 +102,7 @@ class Game {
         this.canvas.style.border = "1px solid #000";
         this.ctx = this.canvas.getContext("2d");
         document.body.appendChild(this.canvas);
-        this.blocks = [new Block(this.ctx, 0, 240, 500, 20, "000")];
+        this.blocks = [new GroundBlock(this.ctx, 0, 240, 500, 20, "000")];
     }
     set player(pl) {
         this._player = pl;

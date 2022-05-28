@@ -20,6 +20,36 @@ enum GameState{
     ui,
 }
 
+abstract class MoveableDrawable implements IDrawable{
+    ctx: CanvasRenderingContext2D;
+    x?: number;
+    y?: number;
+    height: number;
+    width: number;
+
+    color ?: string;
+
+    speed : number;
+
+    constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number, color ?: string) {
+        this.ctx = c
+        this.x = x
+        this.y = y
+        this.width = w
+        this.height = h
+        this.color = color
+    }
+
+    update(): void {
+        this.x -= this.speed
+    }
+    draw(): void {
+        this.ctx.fillStyle = this.color == undefined ? "#FFF" : this.color
+        this.ctx.fillRect(this.x,this.y, this.width, this.height)
+    }
+
+}
+
 class Player implements IDrawable{
     ctx : CanvasRenderingContext2D;
     x: number;
@@ -71,53 +101,31 @@ class Player implements IDrawable{
     }
 }
 
-class Block implements IDrawable{
+class Obstacles extends MoveableDrawable{
+    constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number, color ?: string) {
+        super(c,x,y,w,h)
+    }
+}
+
+class GroundBlock extends MoveableDrawable{
     ctx : CanvasRenderingContext2D;
     x : number;
     y : number;
     height: number;
     width: number;
     color : string;
+
+    obs : Obstacles[];
     
-    sprite : any; 
+    speed : number;
 
-    constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number, color : string)
+    constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number, color : string, s : number = 1)
     {
-        this.ctx = c
-        this.x = x
-        this.y = y
-        this.width = w
-        this.height = h
+        super(c,x,y,w,h)
         this.color = "#" + color
+        this.speed = s
     }
-
-    update(): void {
-        
-    }
-    draw(): void {
-        this.ctx.fillStyle = this.color
-        this.ctx.fillRect(this.x,this.y, this.width, this.height)
-    }
-
 }
-/*
-class ManipulateFile
-{
-    block_types : Map<string, any>;
-    createBlock() : Block {
-        return new Block();
-    }
-    convertTextToBlock(str : string) : void{
-        let temp = str.split('');
-        temp.map((v) => {
-            
-        })
-    }
-    appendBlockType(str : string,  spr : any) : void
-    {
-        this.block_types.set(str, spr)
-    }
-}*/
 
 class Controls{
     codes : any;
@@ -142,7 +150,7 @@ class Controls{
 class Game implements IDrawable{
     state : GameState;
     private _player : Player;
-    blocks : Block[]
+    blocks : GroundBlock[]
     canvas : HTMLCanvasElement;
     ctx : CanvasRenderingContext2D;
     height: number;
@@ -159,7 +167,7 @@ class Game implements IDrawable{
         
         this.ctx = this.canvas.getContext("2d")
         document.body.appendChild(this.canvas)
-        this.blocks = [new Block(this.ctx, 0, 240, 500, 20,"000")]
+        this.blocks = [new GroundBlock(this.ctx, 0, 240, 500, 20,"000")]
     }
     
     public set player(pl : Player) {
@@ -191,7 +199,7 @@ class Game implements IDrawable{
 
     }
 
-    appendBlock(b : Block)
+    appendBlock(b : GroundBlock)
     {
         this.blocks.push(b)
     }
@@ -207,8 +215,6 @@ class Game implements IDrawable{
             element.draw()
         });
         this._player.draw()
-        
-        
     }
 
     private getInput() : void{}
