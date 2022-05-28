@@ -108,15 +108,8 @@ class Obstacles extends MoveableDrawable{
 }
 
 class GroundBlock extends MoveableDrawable{
-    ctx : CanvasRenderingContext2D;
-    x : number;
-    y : number;
-    height: number;
-    width: number;
     color : string;
-
     obs : Obstacles[];
-    
     speed : number;
 
     constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number, color : string, s : number = 1)
@@ -124,6 +117,11 @@ class GroundBlock extends MoveableDrawable{
         super(c,x,y,w,h)
         this.color = "#" + color
         this.speed = s
+        this.generateRandomObstacles()
+    }
+
+    generateRandomObstacles() : void{
+
     }
 }
 
@@ -188,8 +186,7 @@ class Game implements IDrawable{
         this.updateMap();
         
         this.blocks.forEach(element => {
-            //if(!this.isCollide(this._player, element))
-                
+            //if(!this.isCollide(this._player, element))   
             element.update()
         });
         this._player.update();

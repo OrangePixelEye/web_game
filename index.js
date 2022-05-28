@@ -74,6 +74,9 @@ class GroundBlock extends MoveableDrawable {
         super(c, x, y, w, h);
         this.color = "#" + color;
         this.speed = s;
+        this.generateRandomObstacles();
+    }
+    generateRandomObstacles() {
     }
 }
 class Controls {
@@ -117,7 +120,7 @@ class Game {
     update() {
         this.updateMap();
         this.blocks.forEach(element => {
-            //if(!this.isCollide(this._player, element))
+            //if(!this.isCollide(this._player, element))   
             element.update();
         });
         this._player.update();
