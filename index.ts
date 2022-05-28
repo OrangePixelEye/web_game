@@ -5,6 +5,11 @@
 // tsc -w no terminal para watch
 
 interface IDrawable{
+    ctx : CanvasRenderingContext2D;
+    x?: number
+    y? : number
+    height : number;
+    width : number;
     update() : void;
     draw() : void;
 }
@@ -16,20 +21,23 @@ enum GameState{
 }
 
 class Player implements IDrawable{
+    ctx : CanvasRenderingContext2D;
     x: number;
     y: number;
     height : number;
     width : number;
+
     direction : boolean;
     controls : Controls;
     jump_force = 23.6;
     jump_count = 0;
     gravity = 1.6;
     speed = 0;
-    ctx : CanvasRenderingContext2D;
+    
 
     constructor(ctx : CanvasRenderingContext2D, control : Controls){
         this.ctx = ctx
+        this.direction = true
         this.x =50
         this.y = 0
         this.width = 50
@@ -42,16 +50,17 @@ class Player implements IDrawable{
 
         this.speed += this.gravity;
         this.y = (this.direction ? this.y + this.speed : this.y - this.speed)
-
-        if ((this.y > 250 && this.direction) || (this.y < 250 && !this.direction)) {
-            this.y = 250; //- this.height
+        //- this.height  + this.height
+        if ((this.y > 250 - this.height && this.direction) || (this.y < 250  && !this.direction)) {
+            this.y = this.direction ? 240 - this.height : 260
             this.jump_count = 0;
         }
     }
     draw() : void {
         this.ctx.fillStyle = "#FA43D6"
-        this.ctx.fillRect(this.x,this.y, this.height, this.width)
+        this.ctx.fillRect(this.x,this.y, this.width, this.height)
     }
+    
 
     public jump(){
         this.speed = -this.jump_force
@@ -63,18 +72,35 @@ class Player implements IDrawable{
 }
 
 class Block implements IDrawable{
+    ctx : CanvasRenderingContext2D;
     x : number;
     y : number;
+    height: number;
+    width: number;
+    color : string;
+    
     sprite : any; 
+
+    constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number, color : string)
+    {
+        this.ctx = c
+        this.x = x
+        this.y = y
+        this.width = w
+        this.height = h
+        this.color = "#" + color
+    }
+
     update(): void {
         
     }
     draw(): void {
-        
+        this.ctx.fillStyle = this.color
+        this.ctx.fillRect(this.x,this.y, this.width, this.height)
     }
 
 }
-
+/*
 class ManipulateFile
 {
     block_types : Map<string, any>;
@@ -91,7 +117,7 @@ class ManipulateFile
     {
         this.block_types.set(str, spr)
     }
-}
+}*/
 
 class Controls{
     codes : any;
@@ -116,36 +142,58 @@ class Controls{
 class Game implements IDrawable{
     state : GameState;
     private _player : Player;
-    blocks : Block[];
+    blocks : Block[]
     canvas : HTMLCanvasElement;
     ctx : CanvasRenderingContext2D;
+    height: number;
+    width: number;
 
-    constructor(){
+    constructor(h, w){
+        this.height = h
+        this.width = w
         this.canvas = document.createElement("canvas");
         
-        this.canvas.width = 500
-        this.canvas.height = 500
+        this.canvas.width = w
+        this.canvas.height = h
         this.canvas.style.border = "1px solid #000";
         
         this.ctx = this.canvas.getContext("2d")
         document.body.appendChild(this.canvas)
+        this.blocks = [new Block(this.ctx, 0, 240, 500, 20,"000")]
     }
     
     public set player(pl : Player) {
         this._player = pl;
-        
     } 
+
+    // colocar com IDrawable
+    isCollide(a : IDrawable, b : IDrawable) : boolean {
+        return !(
+            ((a.y + a.height) < (b.y)) ||
+            (a.y > (b.y + b.height)) ||
+            ((a.x + a.width) < b.x) ||
+            (a.x > (b.x + b.width))
+        );
+    }
     
     update() : void {
         this.updateMap();
-        this._player.update();
-        /*this.blocks.forEach(element => {
+        
+        this.blocks.forEach(element => {
+            //if(!this.isCollide(this._player, element))
+                
             element.update()
-        });*/
+        });
+        this._player.update();
     }
     // manipular arquivo
     updateMap() : void{
 
+    }
+
+    appendBlock(b : Block)
+    {
+        this.blocks.push(b)
     }
 
     private draw_background() : void {
@@ -155,24 +203,18 @@ class Game implements IDrawable{
 
     draw() : void {
         this.draw_background()
-        this._player.draw()
-        /*this.blocks.forEach(element => {
+        this.blocks.forEach(element => {
             element.draw()
-        });*/
+        });
+        this._player.draw()
+        
+        
     }
 
-    private configureScreen() : void{
-
-    }
-
-    // todo: pegar baseado no código de raycasting
-    private configureInput() : void{}
     private getInput() : void{}
 
     public main() : void
     {
-        this.configureScreen();
-        this.configureInput();
         this.run();
     }
 
@@ -188,12 +230,12 @@ class Game implements IDrawable{
     }
 }
 
-let gm = new Game();
+let gm = new Game(500, 500);
 
 gm.player = new Player(gm.ctx, new Controls());
 
 gm.main()
-
+/*
 let t = new ManipulateFile();
 var filePath = '/mapa.json';
 
@@ -206,3 +248,5 @@ $.getJSON(filePath, function( data ) {
 $.get('map.txt', function(data) {
     console.log(typeof(data) );
  }, 'text');
+
+ // desenhar chão*/
