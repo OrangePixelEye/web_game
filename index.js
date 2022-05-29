@@ -164,7 +164,7 @@ class Game {
         this.appendBlock(new GroundBlock(this.ctx, 630, 240, 100, 20, "ABC"));
         this.obstacles.concat(this.ground_blocks[1].obstacles);
         this._player = new Player(this.ctx, new Controls());
-        console.log(this.obstacles.length);
+        this.points = 0;
     }
     get player() {
         return this._player;
@@ -181,6 +181,7 @@ class Game {
         }
     }
     update() {
+        this.points++;
         this.verifyCollisions();
         this.updateMap();
         this._player.update();
@@ -218,7 +219,6 @@ class Game {
         });
         this._player.draw();
     }
-    getInput() { }
     main() {
         this.run();
     }
@@ -227,10 +227,15 @@ class Game {
         this.draw();
         // cria o loop
         window.requestAnimationFrame(() => this.run());
-        // images
-        this.getInput();
+    }
+    calculatePoints() {
+        return this.roundUp(this.points / 90, 2);
     }
     gameOver() {
+    }
+    roundUp(num, precision) {
+        precision = Math.pow(10, precision);
+        return Math.ceil(num * precision) / precision;
     }
 }
 class Tutorial extends Game {

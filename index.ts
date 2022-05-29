@@ -145,7 +145,7 @@ class Player implements IDrawable{
 }
 
 class Obstacles extends MoveableDrawable{
-    constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number = 0, color ?: string, sp: number) {
+    constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number = 0, color : string, sp: number) {
         super(c,x,y,w,h)
         this.height = this.randomHeight()
         this.speed = sp
@@ -253,7 +253,7 @@ class Game implements IDrawable{
         
         
         this._player = new Player(this.ctx, new Controls());
-        console.log(this.obstacles.length)
+        this.points = 0
     }
 
     public get player()
@@ -276,6 +276,7 @@ class Game implements IDrawable{
     }
     
     update() : void {
+        this.points++;
         this.verifyCollisions();
         this.updateMap();
            
@@ -320,7 +321,6 @@ class Game implements IDrawable{
         this._player.draw()
     }
 
-    private getInput() : void{}
 
     public main() : void
     {
@@ -334,12 +334,20 @@ class Game implements IDrawable{
         
         // cria o loop
         window.requestAnimationFrame(() => this.run())
-        // images
-        this.getInput();
+    }
+
+    public calculatePoints() : number{
+    
+        return this.roundUp(this.points/90, 2)
     }
 
     private gameOver() : void{
 
+    }
+
+    private roundUp(num : number, precision : number) : number{
+        precision = Math.pow(10, precision)
+        return Math.ceil(num * precision) / precision
     }
 }
 
