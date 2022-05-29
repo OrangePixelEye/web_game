@@ -17,12 +17,14 @@ class MoveableDrawable {
         this.width = w;
         this.height = h;
         this.color = color;
+        if (this.color === undefined)
+            this.color = "#FFFFFF";
     }
     update() {
         this.x -= this.speed;
     }
     draw() {
-        this.ctx.fillStyle = this.color == undefined ? "#FFF" : this.color;
+        this.ctx.fillStyle = this.color;
         this.ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 }
@@ -92,13 +94,14 @@ class Player {
     }
 }
 class Obstacles extends MoveableDrawable {
-    constructor(c, x, y, w, h = 0, color) {
+    constructor(c, x, y, w, h = 0, color, sp) {
         super(c, x, y, w, h);
         this.height = this.randomHeight();
+        this.speed = sp;
     }
-    // do some math '-'
+    // do some math '-' and generate + and - obstacles
     randomHeight() {
-        return 0;
+        return Math.floor(Math.random() * 255) - 255;
     }
 }
 class GroundBlock extends MoveableDrawable {
@@ -109,6 +112,21 @@ class GroundBlock extends MoveableDrawable {
         this.generateRandomObstacles();
     }
     generateRandomObstacles() {
+        let obs_n = Math.floor(Math.random() * (this.width / 50)) + 1;
+        this.obs = [new Obstacles(this.ctx, 640, this.y, 135, 15, "FFF", this.speed)];
+        console.log(this.obs[0]);
+        for (let i = 0; i < obs_n; i++) {
+            this.obs.push(new Obstacles(this.ctx, this.chooseRandomPosition(), this.y, 25, 1, "FFFF", this.speed));
+        }
+    }
+    chooseRandomPosition() {
+        return Math.floor(Math.random() * this.width) + this.x;
+    }
+    get obstacles() {
+        return this.obs;
+    }
+    update() {
+        super.update();
     }
     insideScreen() {
         // verify if its inside the screen
@@ -141,11 +159,15 @@ class Game {
         this.canvas.style.border = "1px solid #000";
         this.ctx = this.canvas.getContext("2d");
         document.body.appendChild(this.canvas);
-        this.blocks = [new GroundBlock(this.ctx, 0, 240, 500, 20, "000")];
+        this.ground_blocks = [new GroundBlock(this.ctx, 0, 240, 500, 20, "000")];
+        this.obstacles = this.ground_blocks[0].obstacles;
         this.appendBlock(new GroundBlock(this.ctx, 630, 240, 100, 20, "ABC"));
+        this.obstacles.concat(this.ground_blocks[1].obstacles);
+        this._player = new Player(this.ctx, new Controls());
+        console.log(this.obstacles.length);
     }
-    set player(pl) {
-        this._player = pl;
+    get player() {
+        return this._player;
     }
     static detectCollision(a, b) {
         try {
@@ -159,21 +181,30 @@ class Game {
         }
     }
     update() {
+        this.verifyCollisions();
         this.updateMap();
-        this.blocks.forEach(element => {
-            element.update();
-        });
-        // a colisão é sempre com o bloco atual
-        this._player.is_colliding = Game.detectCollision(this._player, this.blocks[0]);
-        if (!this.blocks[0].insideScreen())
-            this.blocks.shift();
         this._player.update();
     }
-    // manipular arquivo
     updateMap() {
+        this.ground_blocks.forEach(element => {
+            element.update();
+        });
+        this.obstacles.forEach(e => e.update());
+        // a colisão é sempre com o bloco atual
+        this._player.is_colliding = Game.detectCollision(this._player, this.ground_blocks[0]);
+        if (!this.ground_blocks[0].insideScreen())
+            this.ground_blocks.shift();
+    }
+    verifyCollisions() {
+        if (this.obstacles === undefined)
+            return;
+        this.obstacles.forEach(element => {
+            if (Game.detectCollision(this._player, element))
+                this.gameOver();
+        });
     }
     appendBlock(b) {
-        this.blocks.push(b);
+        this.ground_blocks.push(b);
     }
     draw_background() {
         this.ctx.fillStyle = "#101EF2";
@@ -181,7 +212,8 @@ class Game {
     }
     draw() {
         this.draw_background();
-        this.blocks.forEach(element => {
+        this.obstacles.forEach(e => e.draw());
+        this.ground_blocks.forEach(element => {
             element.draw();
         });
         this._player.draw();
@@ -198,11 +230,13 @@ class Game {
         // images
         this.getInput();
     }
+    gameOver() {
+    }
 }
 class Tutorial extends Game {
 }
 let gm = new Game(500, 500);
-gm.player = new Player(gm.ctx, new Controls());
+//gm.player = 
 gm.main();
 /*
 let t = new ManipulateFile();

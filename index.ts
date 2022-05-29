@@ -4,12 +4,12 @@
  */
 // tsc -w no terminal para watch
 
-// todo: implement obstacles
+// todo: implement obstacles ( doing)
 // todo: styles
 // todo: complete a save
 // todo: tutorial
 // todo: level generation
-// todo: points
+// todo: points ( doing)
 
 
 interface IDrawable{
@@ -46,13 +46,14 @@ abstract class MoveableDrawable implements IDrawable{
         this.width = w
         this.height = h
         this.color = color
+        if(this.color === undefined) this.color = "#FFFFFF"
     }
 
     update(): void {
         this.x -= this.speed
     }
     draw(): void {
-        this.ctx.fillStyle = this.color == undefined ? "#FFF" : this.color
+        this.ctx.fillStyle = this.color
         this.ctx.fillRect(this.x,this.y, this.width, this.height)
     }
 
@@ -144,21 +145,22 @@ class Player implements IDrawable{
 }
 
 class Obstacles extends MoveableDrawable{
-    constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number = 0, color ?: string) {
+    constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number = 0, color ?: string, sp: number) {
         super(c,x,y,w,h)
         this.height = this.randomHeight()
+        this.speed = sp
     }
 
-    // do some math '-'
+    // do some math '-' and generate + and - obstacles
     public randomHeight() : number
     {
-        return 0;
+        return Math.floor(Math.random() * 255) - 255;
     }
 }
 
 class GroundBlock extends MoveableDrawable{
     color : string;
-    obs : Obstacles[];
+    private obs : Obstacles[];
     speed : number;
 
     constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number, color : string, s : number = 1)
@@ -170,7 +172,27 @@ class GroundBlock extends MoveableDrawable{
     }
 
     private generateRandomObstacles() : void{
+        let obs_n = Math.floor(Math.random() * (this.width / 50)) + 1;
+        
+        this.obs = [new Obstacles(this.ctx, 640, this.y, 135, 15, "FFF",this.speed)]
+        console.log(this.obs[0])
+        for(let i = 0; i < obs_n; i++)
+        {
+            this.obs.push(new Obstacles(this.ctx,this.chooseRandomPosition(), this.y, 25, 1, "FFFF",this.speed))
+        }
+    }
 
+    private chooseRandomPosition() : number{
+        return Math.floor(Math.random() * this.width) + this.x;
+    }
+
+    public get obstacles()
+    {
+        return this.obs;
+    }
+
+    update(): void {
+        super.update()
     }
 
     public insideScreen() : boolean {
@@ -202,7 +224,8 @@ class Controls{
 class Game implements IDrawable{
     state : GameState;
     private _player : Player;
-    blocks : GroundBlock[]
+    ground_blocks : GroundBlock[]
+    obstacles : MoveableDrawable[]
     canvas : HTMLCanvasElement;
     ctx : CanvasRenderingContext2D;
     height: number;
@@ -220,13 +243,23 @@ class Game implements IDrawable{
         
         this.ctx = this.canvas.getContext("2d")
         document.body.appendChild(this.canvas)
-        this.blocks = [new GroundBlock(this.ctx, 0, 240, 500, 20,"000")]
+        
+        this.ground_blocks = [new GroundBlock(this.ctx, 0, 240, 500, 20,"000")]
+        this.obstacles = this.ground_blocks[0].obstacles;
+        
         this.appendBlock(new GroundBlock( this.ctx, 630, 240 , 100,20, "ABC"))
+        this.obstacles.concat(this.ground_blocks[1].obstacles)
+        
+        
+        
+        this._player = new Player(this.ctx, new Controls());
+        console.log(this.obstacles.length)
     }
-    
-    public set player(pl : Player) {
-        this._player = pl;
-    } 
+
+    public get player()
+    {
+        return this._player;
+    }
 
     public static detectCollision(a : IDrawable, b : IDrawable) : boolean {
         try{
@@ -243,28 +276,33 @@ class Game implements IDrawable{
     }
     
     update() : void {
+        this.verifyCollisions();
         this.updateMap();
-        
-        
-        this.blocks.forEach(element => {
-            element.update()
-            
-        });
-
-        // a colisão é sempre com o bloco atual
-        this._player.is_colliding = Game.detectCollision(this._player, this.blocks[0])
-        if(!this.blocks[0].insideScreen())  this.blocks.shift() 
-        
+           
         this._player.update();
     }
-    // manipular arquivo
     updateMap() : void{
+        this.ground_blocks.forEach(element => {
+            element.update()
+        });
+        this.obstacles.forEach(e => e.update());
 
+        // a colisão é sempre com o bloco atual
+        this._player.is_colliding = Game.detectCollision(this._player, this.ground_blocks[0])
+        if(!this.ground_blocks[0].insideScreen())  this.ground_blocks.shift() 
+    }
+
+    verifyCollisions() : void{
+        if(this.obstacles === undefined) return;
+        this.obstacles.forEach(element => {
+            if(Game.detectCollision(this._player, element))
+                this.gameOver()
+        });
     }
 
     appendBlock(b : GroundBlock)
     {
-        this.blocks.push(b)
+        this.ground_blocks.push(b)
     }
 
     private draw_background() : void {
@@ -274,7 +312,9 @@ class Game implements IDrawable{
 
     draw() : void {
         this.draw_background()
-        this.blocks.forEach(element => {
+        this.obstacles.forEach(e => e.draw())
+
+        this.ground_blocks.forEach(element => {
             element.draw()
         });
         this._player.draw()
@@ -297,6 +337,10 @@ class Game implements IDrawable{
         // images
         this.getInput();
     }
+
+    private gameOver() : void{
+
+    }
 }
 
 class Tutorial extends Game{
@@ -305,7 +349,7 @@ class Tutorial extends Game{
 
 let gm = new Game(500, 500);
 
-gm.player = new Player(gm.ctx, new Controls());
+//gm.player = 
 
 gm.main()
 /*
