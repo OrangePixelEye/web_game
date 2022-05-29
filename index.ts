@@ -4,12 +4,12 @@
  */
 // tsc -w no terminal para watch
 
-// todo: implement obstacles ( doing)
+// todo: implement obstacles ( needs collision)
 // todo: styles
 // todo: complete a save
 // todo: tutorial
 // todo: level generation
-// todo: points ( doing)
+
 
 
 interface IDrawable{
