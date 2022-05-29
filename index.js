@@ -232,6 +232,7 @@ class Game {
         return this.roundUp(this.points / 90, 2);
     }
     gameOver() {
+        // todo
     }
     roundUp(num, precision) {
         precision = Math.pow(10, precision);

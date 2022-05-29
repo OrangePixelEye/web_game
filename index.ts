@@ -4,12 +4,10 @@
  */
 // tsc -w no terminal para watch
 
-// todo: implement obstacles ( needs collision)
 // todo: styles
 // todo: complete a save
 // todo: tutorial
 // todo: level generation
-
 
 
 interface IDrawable{
@@ -342,7 +340,7 @@ class Game implements IDrawable{
     }
 
     private gameOver() : void{
-
+        // todo
     }
 
     private roundUp(num : number, precision : number) : number{
