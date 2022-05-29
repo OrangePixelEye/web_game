@@ -50,6 +50,19 @@ abstract class MoveableDrawable implements IDrawable{
 
 }
 
+abstract class SaveSystem{
+    // local storage
+    public static save(info : Map<string, string>) : void{
+        info.forEach((v, k) => {
+            localStorage.setItem(k,v)
+        });
+    }
+
+    public static load(key : string) : string{
+        return localStorage.getItem(key)
+    }
+}
+
 class Player implements IDrawable{
     ctx : CanvasRenderingContext2D;
     x: number;
@@ -57,14 +70,14 @@ class Player implements IDrawable{
     height : number;
     width : number;
 
-    direction : boolean;
-    controls : Controls;
-    jump_force = 23.6;
-    jump_count = 0;
-    gravity = 1.6;
-    speed = 0;
-    
+    private direction : boolean;
+    private controls : Controls;
+    private jump_force = 23.6;
+    private gravity = 0.6;
+    private vertical_speed = 0;
 
+    public is_colliding : boolean = false;
+    
     constructor(ctx : CanvasRenderingContext2D, control : Controls){
         this.ctx = ctx
         this.direction = true
@@ -75,35 +88,63 @@ class Player implements IDrawable{
         this.controls = control
     }
     update() : void {
-        if (this.controls.states.forward) this.jump();
-        if (this.controls.states.left) this.invert();
-
-        this.speed += this.gravity;
-        this.y = (this.direction ? this.y + this.speed : this.y - this.speed)
-        //- this.height  + this.height
-        if ((this.y > 250 - this.height && this.direction) || (this.y < 250  && !this.direction)) {
-            this.y = this.direction ? 240 - this.height : 260
-            this.jump_count = 0;
-        }
+        this.getInput();
+        
+        this.calcGravity();
+        this.groundCollision();
     }
     draw() : void {
         this.ctx.fillStyle = "#FA43D6"
         this.ctx.fillRect(this.x,this.y, this.width, this.height)
     }
     
-
-    public jump(){
-        this.speed = -this.jump_force
+    public jump() : void {
+        // trava o pulo para apenas colisão
+        if(this.is_colliding)
+            this.vertical_speed = -this.jump_force
     }
 
-    private invert(){
+    private invert() : void {
         this.direction = !this.direction;
     }
+
+    private getInput() : void {
+        if (this.controls.states.forward) this.jump();
+        if (this.controls.states.left) this.invert();
+    }
+
+    private calcGravity() : void {
+        this.vertical_speed += this.gravity;
+        this.y = (this.direction ? this.y + this.vertical_speed : this.y - this.vertical_speed)
+    }
+
+    private groundCollision() :void {
+        if (
+            ((this.y > 250 - this.height && this.direction) || 
+            (this.y < 250  && !this.direction))
+            ) {
+                if(this.is_colliding){
+                    this.y = this.direction ? 240 - this.height : 260
+
+                }
+        }
+        if(this.y > 300 && this.direction) this.invert()
+        if(this.y < 200 && !this.direction) this.invert()
+        
+    }
+    
 }
 
 class Obstacles extends MoveableDrawable{
-    constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number, color ?: string) {
+    constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number = 0, color ?: string) {
         super(c,x,y,w,h)
+        this.height = this.randomHeight()
+    }
+
+    // do some math '-'
+    public randomHeight() : number
+    {
+        return 0;
     }
 }
 
@@ -120,8 +161,13 @@ class GroundBlock extends MoveableDrawable{
         this.generateRandomObstacles()
     }
 
-    generateRandomObstacles() : void{
+    private generateRandomObstacles() : void{
 
+    }
+
+    public insideScreen() : boolean {
+        // verify if its inside the screen
+        return (this.x > -510)
     }
 }
 
@@ -166,29 +212,40 @@ class Game implements IDrawable{
         this.ctx = this.canvas.getContext("2d")
         document.body.appendChild(this.canvas)
         this.blocks = [new GroundBlock(this.ctx, 0, 240, 500, 20,"000")]
+        this.appendBlock(new GroundBlock( this.ctx, 630, 240 , 100,20, "ABC"))
     }
     
     public set player(pl : Player) {
         this._player = pl;
     } 
 
-    // colocar com IDrawable
-    isCollide(a : IDrawable, b : IDrawable) : boolean {
-        return !(
-            ((a.y + a.height) < (b.y)) ||
-            (a.y > (b.y + b.height)) ||
-            ((a.x + a.width) < b.x) ||
-            (a.x > (b.x + b.width))
-        );
+    public static detectCollision(a : IDrawable, b : IDrawable) : boolean {
+        try{
+            return !(
+                ((a.y + a.height) < (b.y)) ||
+                (a.y > (b.y + b.height)) ||
+                ((a.x + a.width) < b.x) ||
+                (a.x > (b.x + b.width))
+            );
+        }
+        catch{
+            throw "Bloco não encontrado"
+        }
     }
     
     update() : void {
         this.updateMap();
         
+        
         this.blocks.forEach(element => {
-            //if(!this.isCollide(this._player, element))   
             element.update()
+            
         });
+
+        // a colisão é sempre com o bloco atual
+        this._player.is_colliding = Game.detectCollision(this._player, this.blocks[0])
+        if(!this.blocks[0].insideScreen())  this.blocks.shift() 
+        
         this._player.update();
     }
     // manipular arquivo
