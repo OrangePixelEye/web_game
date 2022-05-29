@@ -4,6 +4,14 @@
  */
 // tsc -w no terminal para watch
 
+// todo: implement obstacles
+// todo: styles
+// todo: complete a save
+// todo: tutorial
+// todo: level generation
+// todo: points
+
+
 interface IDrawable{
     ctx : CanvasRenderingContext2D;
     x?: number
@@ -199,6 +207,7 @@ class Game implements IDrawable{
     ctx : CanvasRenderingContext2D;
     height: number;
     width: number;
+    points : number;
 
     constructor(h, w){
         this.height = h
@@ -288,6 +297,10 @@ class Game implements IDrawable{
         // images
         this.getInput();
     }
+}
+
+class Tutorial extends Game{
+
 }
 
 let gm = new Game(500, 500);

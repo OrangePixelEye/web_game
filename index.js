@@ -199,6 +199,8 @@ class Game {
         this.getInput();
     }
 }
+class Tutorial extends Game {
+}
 let gm = new Game(500, 500);
 gm.player = new Player(gm.ctx, new Controls());
 gm.main();
