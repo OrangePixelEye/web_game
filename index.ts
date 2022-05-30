@@ -250,7 +250,9 @@ class Game implements IDrawable{
         this.appendBlock(new GroundBlock( this.ctx, 630, 240 , 100,20, "ABC"))
         this.obstacles.concat(this.ground_blocks[1].obstacles)
         
+        this.ctx.font = '50px serif';
         this._player = new Player(this.ctx, new Controls());
+        this.state = GameState.playing
         this.points = 0
     }
 
@@ -356,7 +358,7 @@ class Game implements IDrawable{
     }
 
     public updateScreenPoints(points : number) : void {
-
+        this.ctx.fillText("teste", 255, 255)
     }
     
     private gameOver() : void {
