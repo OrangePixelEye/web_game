@@ -295,7 +295,7 @@ class Game implements IDrawable{
         if(this.obstacles === undefined) return;
         this.obstacles.forEach(element => {
             if(Game.detectCollision(this._player, element))
-                this.gameOver()
+                this.state = GameState.lose
         });
     }
 
@@ -329,7 +329,7 @@ class Game implements IDrawable{
     {
         this.update();
         this.draw();
-        this.drawUI();
+        this.drawUI(this.state);
         // cria o loop
         window.requestAnimationFrame(() => this.run())
     }
@@ -339,12 +339,29 @@ class Game implements IDrawable{
     }
 
     // todo
-    public drawUI() : void{
-
+    public drawUI(state : GameState) : void{
+        switch(state){
+            case GameState.playing:
+                this.updateScreenPoints(this.points)
+                break;
+            case GameState.lose:
+                this.gameOver();
+                break;
+            case GameState.ui:
+                // não sei '-'
+                break
+            default:
+                throw "Undefined status"
+        }
     }
 
-    private gameOver() : void{
-        // todo
+    public updateScreenPoints(points : number) : void {
+
+    }
+    
+    private gameOver() : void {
+        // todo: save
+        // todo: show lose screen
     }
 
     private roundUp(num : number, precision : number) : number{
@@ -357,10 +374,9 @@ class Tutorial extends Game{
 
 }
 
+// todo: verificar se é a primeira vez jogando, se for pegar tutorial
+
 let gm = new Game(500, 500);
-
-//gm.player = 
-
 gm.main()
 /*
 let t = new ManipulateFile();

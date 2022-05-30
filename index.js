@@ -203,7 +203,7 @@ class Game {
             return;
         this.obstacles.forEach(element => {
             if (Game.detectCollision(this._player, element))
-                this.gameOver();
+                this.state = GameState.lose;
         });
     }
     appendBlock(b) {
@@ -227,7 +227,7 @@ class Game {
     run() {
         this.update();
         this.draw();
-        this.drawUI();
+        this.drawUI(this.state);
         // cria o loop
         window.requestAnimationFrame(() => this.run());
     }
@@ -235,10 +235,26 @@ class Game {
         return this.roundUp(this.points / 90, 2);
     }
     // todo
-    drawUI() {
+    drawUI(state) {
+        switch (state) {
+            case GameState.playing:
+                this.updateScreenPoints(this.points);
+                break;
+            case GameState.lose:
+                this.gameOver();
+                break;
+            case GameState.ui:
+                // não sei '-'
+                break;
+            default:
+                throw "Undefined status";
+        }
+    }
+    updateScreenPoints(points) {
     }
     gameOver() {
-        // todo
+        // todo: save
+        // todo: show lose screen
     }
     roundUp(num, precision) {
         precision = Math.pow(10, precision);
@@ -247,8 +263,8 @@ class Game {
 }
 class Tutorial extends Game {
 }
+// todo: verificar se é a primeira vez jogando, se for pegar tutorial
 let gm = new Game(500, 500);
-//gm.player = 
 gm.main();
 /*
 let t = new ManipulateFile();
