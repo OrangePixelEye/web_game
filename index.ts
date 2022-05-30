@@ -146,7 +146,6 @@ class Obstacles extends MoveableDrawable{
     constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number = 0, color : string, sp: number) {
         super(c,x,y,w,h)
         this.height = this.randomHeight()
-        console.log(this.height)
         this.speed = sp
     }
     
@@ -171,10 +170,11 @@ class GroundBlock extends MoveableDrawable{
         this.generateRandomObstacles()
     }
 
+    // todo: fix this functon
     private generateRandomObstacles() : void{
         let obs_n = Math.floor(Math.random() * (this.width / 50)) + 1;
         
-        this.obs = [new Obstacles(this.ctx, 640, this.y, 135, 15, "FFF",this.speed)]
+        this.obs = [new Obstacles(this.ctx, 640, this.y, 13, 15, "FFF",this.speed)]
         console.log(this.obs[0])
         for(let i = 0; i < obs_n; i++)
         {
@@ -329,14 +329,18 @@ class Game implements IDrawable{
     {
         this.update();
         this.draw();
-        
+        this.drawUI();
         // cria o loop
         window.requestAnimationFrame(() => this.run())
     }
 
-    public calculatePoints() : number{
-    
+    public calculatePoints() : number{  
         return this.roundUp(this.points/90, 2)
+    }
+
+    // todo
+    public drawUI() : void{
+
     }
 
     private gameOver() : void{

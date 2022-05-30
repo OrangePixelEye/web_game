@@ -97,7 +97,6 @@ class Obstacles extends MoveableDrawable {
     constructor(c, x, y, w, h = 0, color, sp) {
         super(c, x, y, w, h);
         this.height = this.randomHeight();
-        console.log(this.height);
         this.speed = sp;
     }
     randomHeight() {
@@ -113,9 +112,10 @@ class GroundBlock extends MoveableDrawable {
         this.speed = s;
         this.generateRandomObstacles();
     }
+    // todo: fix this functon
     generateRandomObstacles() {
         let obs_n = Math.floor(Math.random() * (this.width / 50)) + 1;
-        this.obs = [new Obstacles(this.ctx, 640, this.y, 135, 15, "FFF", this.speed)];
+        this.obs = [new Obstacles(this.ctx, 640, this.y, 13, 15, "FFF", this.speed)];
         console.log(this.obs[0]);
         for (let i = 0; i < obs_n; i++) {
             this.obs.push(new Obstacles(this.ctx, this.chooseRandomPosition(), this.y, 25, 1, "FFFF", this.speed));
@@ -227,11 +227,15 @@ class Game {
     run() {
         this.update();
         this.draw();
+        this.drawUI();
         // cria o loop
         window.requestAnimationFrame(() => this.run());
     }
     calculatePoints() {
         return this.roundUp(this.points / 90, 2);
+    }
+    // todo
+    drawUI() {
     }
     gameOver() {
         // todo
