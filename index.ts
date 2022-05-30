@@ -146,13 +146,15 @@ class Obstacles extends MoveableDrawable{
     constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number = 0, color : string, sp: number) {
         super(c,x,y,w,h)
         this.height = this.randomHeight()
+        console.log(this.height)
         this.speed = sp
     }
-
-    // do some math '-' and generate + and - obstacles
+    
     public randomHeight() : number
     {
-        return Math.floor(Math.random() * 255) - 255;
+        // numbers positive = down
+        // numers negative = up
+        return Math.floor(Math.random() * 100) - 50;
     }
 }
 
@@ -247,8 +249,6 @@ class Game implements IDrawable{
         
         this.appendBlock(new GroundBlock( this.ctx, 630, 240 , 100,20, "ABC"))
         this.obstacles.concat(this.ground_blocks[1].obstacles)
-        
-        
         
         this._player = new Player(this.ctx, new Controls());
         this.points = 0

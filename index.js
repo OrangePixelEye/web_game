@@ -97,11 +97,13 @@ class Obstacles extends MoveableDrawable {
     constructor(c, x, y, w, h = 0, color, sp) {
         super(c, x, y, w, h);
         this.height = this.randomHeight();
+        console.log(this.height);
         this.speed = sp;
     }
-    // do some math '-' and generate + and - obstacles
     randomHeight() {
-        return Math.floor(Math.random() * 255) - 255;
+        // numbers positive = down
+        // numers negative = up
+        return Math.floor(Math.random() * 100) - 50;
     }
 }
 class GroundBlock extends MoveableDrawable {
