@@ -97,16 +97,16 @@ class Obstacles extends MoveableDrawable {
     constructor(c, x, y, w, h = 0, color, sp) {
         super(c, x, y, w, h);
         this.height = this.randomHeight();
-        this.y = this.randomY();
+        this.y = this.randomY(this.height);
         this.speed = sp;
     }
     randomHeight() {
         // numbers positive = down
         // numbers negative = up
-        return Math.floor(Math.random() * 100);
+        return Math.floor(Math.random() * 51) + 10;
     }
-    randomY() {
-        return Math.floor((Math.random() * 50) - 50) + 250;
+    randomY(height) {
+        return Math.floor((Math.random() > 0.5 ? 0 : -height)) + 250;
     }
 }
 class GroundBlock extends MoveableDrawable {
@@ -122,7 +122,6 @@ class GroundBlock extends MoveableDrawable {
         this.obs = [new Obstacles(this.ctx, 640, this.y + 10, 13, 15, "FFF", this.speed)];
         for (let i = 0; i < obs_n; i++) {
             this.obs.push(new Obstacles(this.ctx, this.chooseRandomPosition(), this.y + 10, 25, 1, "FFFF", this.speed));
-            console.log(this.obs[i]);
         }
     }
     chooseRandomPosition() {
