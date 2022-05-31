@@ -88,10 +88,10 @@ class Player implements IDrawable{
     constructor(ctx : CanvasRenderingContext2D, control : Controls){
         this.ctx = ctx
         this.direction = true
-        this.x =50
+        this.x = 50
         this.y = 0
-        this.width = 50
-        this.height = 50
+        this.width = 30
+        this.height = 30
         this.controls = control
     }
     update() : void {
@@ -132,12 +132,10 @@ class Player implements IDrawable{
             ) {
                 if(this.is_colliding){
                     this.y = this.direction ? 240 - this.height : 260
-
                 }
         }
         if(this.y > 300 && this.direction) this.invert()
         if(this.y < 200 && !this.direction) this.invert()
-        
     }
     
 }
@@ -146,14 +144,19 @@ class Obstacles extends MoveableDrawable{
     constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number = 0, color : string, sp: number) {
         super(c,x,y,w,h)
         this.height = this.randomHeight()
+        this.y = this.randomY();
         this.speed = sp
     }
     
     public randomHeight() : number
     {
         // numbers positive = down
-        // numers negative = up
-        return Math.floor(Math.random() * 100) - 50;
+        // numbers negative = up
+        return Math.floor(Math.random() * 100);
+    }
+
+    private randomY() : number {
+        return Math.floor((Math.random() * 50) - 50) + 250;
     }
 }
 
@@ -174,12 +177,14 @@ class GroundBlock extends MoveableDrawable{
     private generateRandomObstacles() : void{
         let obs_n = Math.floor(Math.random() * (this.width / 50)) + 1;
         
-        this.obs = [new Obstacles(this.ctx, 640, this.y, 13, 15, "FFF",this.speed)]
-        console.log(this.obs[0])
+        this.obs = [new Obstacles(this.ctx, 640, this.y + 10, 13, 15, "FFF",this.speed)]
+        
         for(let i = 0; i < obs_n; i++)
         {
-            this.obs.push(new Obstacles(this.ctx,this.chooseRandomPosition(), this.y, 25, 1, "FFFF",this.speed))
+            this.obs.push(new Obstacles(this.ctx,this.chooseRandomPosition(), this.y + 10, 25, 1, "FFFF",this.speed))
+            console.log(this.obs[i])
         }
+        
     }
 
     private chooseRandomPosition() : number{
@@ -189,11 +194,7 @@ class GroundBlock extends MoveableDrawable{
     public get obstacles()
     {
         return this.obs;
-    }
-
-    update(): void {
-        super.update()
-    }
+    } 
 
     public insideScreen() : boolean {
         // verify if its inside the screen
@@ -264,10 +265,10 @@ class Game implements IDrawable{
     public static detectCollision(a : IDrawable, b : IDrawable) : boolean {
         try{
             return !(
-                ((a.y + a.height) < (b.y)) ||
-                (a.y > (b.y + b.height)) ||
-                ((a.x + a.width) < b.x) ||
-                (a.x > (b.x + b.width))
+                ((a.y + a.height) < (b.y)) || // colide em baixo
+                (a.y > (b.y + b.height)) || // em cima
+                ((a.x + a.width) < b.x) || // direita
+                (a.x > (b.x + b.width)) // esquerda
             );
         }
         catch{
@@ -296,7 +297,7 @@ class Game implements IDrawable{
     verifyCollisions() : void{
         if(this.obstacles === undefined) return;
         this.obstacles.forEach(element => {
-            if(Game.detectCollision(this._player, element))
+            if(Game.detectCollision(element, this._player))
                 this.state = GameState.lose
         });
     }
@@ -315,12 +316,16 @@ class Game implements IDrawable{
         this.draw_background()
         this.obstacles.forEach(e => e.draw())
 
-        this.ground_blocks.forEach(element => {
-            element.draw()
-        });
+        this.drawGround();
+        
         this._player.draw()
     }
 
+    drawGround() : void{
+        this.ground_blocks.forEach(element => {
+            element.draw()
+        });
+    }
 
     public main() : void
     {
@@ -358,7 +363,7 @@ class Game implements IDrawable{
     }
 
     public updateScreenPoints(points : number) : void {
-        this.ctx.fillText("teste", 255, 255)
+        this.ctx.fillText(points.toString(), 255, 255)
     }
     
     private gameOver() : void {
