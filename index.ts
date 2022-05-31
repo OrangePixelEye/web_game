@@ -50,7 +50,7 @@ abstract class MoveableDrawable implements IDrawable{
     update(): void {
         this.x -= this.speed
     }
-    draw(): void {
+    draw(): void {  
         this.ctx.fillStyle = this.color
         this.ctx.fillRect(this.x,this.y, this.width, this.height)
     }
@@ -363,7 +363,7 @@ class Game implements IDrawable{
     }
 
     public updateScreenPoints(points : number) : void {
-        this.ctx.fillText(points.toString(), 255, 255)
+        this.ctx.fillText(points.toString(), 255, 100)
     }
     
     private gameOver() : void {

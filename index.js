@@ -257,7 +257,7 @@ class Game {
         }
     }
     updateScreenPoints(points) {
-        this.ctx.fillText(points.toString(), 255, 255);
+        this.ctx.fillText(points.toString(), 255, 100);
     }
     gameOver() {
         // todo: save
