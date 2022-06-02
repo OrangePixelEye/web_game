@@ -198,8 +198,8 @@ class GroundBlock extends MoveableDrawable{
     } 
 
     public insideScreen() : boolean {
-        // verify if its inside the screen
-        return (this.x > -510)
+        // verify if its inside the screen		
+		return (this.x > -this.width)
     }
 }
 
@@ -249,7 +249,7 @@ class Game implements IDrawable{
         this.ground_blocks = [new GroundBlock(this.ctx, 0, 240, 500, 20,"000")]
         this.obstacles = this.ground_blocks[0].obstacles;
         
-        this.appendBlock(new GroundBlock( this.ctx, 630, 240 , 100,20, "ABC"))
+        this.appendBlock(new GroundBlock( this.ctx, 570, 240 , 100, 20, "ABC"))
         this.obstacles.concat(this.ground_blocks[1].obstacles)
         
         this.ctx.font = '50px serif';
@@ -287,13 +287,27 @@ class Game implements IDrawable{
     updateMap() : void{
         this.ground_blocks.forEach(element => {
             element.update()
+			if(!element.insideScreen()){
+				console.log("sumiu")
+				// tem q tirar os obstaculos dps
+				this.ground_blocks[0].obstacles.length;
+				this.ground_blocks.shift() 
+				this.generateNewBlock();
+			}
         });
+		  
+
         this.obstacles.forEach(e => e.update());
 
         // a colisão é sempre com o bloco atual
         this._player.is_colliding = Game.detectCollision(this._player, this.ground_blocks[0])
-        if(!this.ground_blocks[0].insideScreen())  this.ground_blocks.shift() 
+        
     }
+
+	generateNewBlock() : void{
+		this.appendBlock(new GroundBlock( this.ctx, 350, 240 , 100, 20, "ABC"))
+        this.obstacles.concat(this.ground_blocks[1].obstacles)
+	}
 
     verifyCollisions() : void{
         if(this.obstacles === undefined) return;
