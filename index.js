@@ -41,7 +41,7 @@ class SaveSystem {
 }
 class Player {
     constructor(ctx, control) {
-        this.jump_force = 23.6;
+        this.jump_force = 15.6;
         this.gravity = 0.6;
         this.vertical_speed = 0;
         this.is_colliding = false;
@@ -68,6 +68,7 @@ class Player {
             this.vertical_speed = -this.jump_force;
     }
     invert() {
+        this.vertical_speed -= this.jump_force;
         this.direction = !this.direction;
     }
     getInput() {
@@ -110,7 +111,7 @@ class Obstacles extends MoveableDrawable {
     }
 }
 class GroundBlock extends MoveableDrawable {
-    constructor(c, x, y, w, h, color, s = 1) {
+    constructor(c, x, y, w, h, color, s = 1.8) {
         super(c, x, y, w, h);
         this.color = "#" + color;
         this.speed = s;

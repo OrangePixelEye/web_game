@@ -79,7 +79,7 @@ class Player implements IDrawable{
 
     private direction : boolean;
     private controls : Controls;
-    private jump_force = 23.6;
+    private jump_force = 15.6;
     private gravity = 0.6;
     private vertical_speed = 0;
 
@@ -112,6 +112,7 @@ class Player implements IDrawable{
     }
 
     private invert() : void {
+		this.vertical_speed -= this.jump_force
         this.direction = !this.direction;
     }
 
@@ -166,7 +167,7 @@ class GroundBlock extends MoveableDrawable{
     private obs : Obstacles[];
     speed : number;
 
-    constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number, color : string, s : number = 1)
+    constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number, color : string, s : number = 1.8)
     {
         super(c,x,y,w,h)
         this.color = "#" + color
