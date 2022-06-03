@@ -59,11 +59,15 @@ abstract class MoveableDrawable implements IDrawable{
 
 abstract class SaveSystem{
     // local storage
-    public static save(info : Map<string, string>) : void{
+    public static saveArray(info : Map<string, string>) : void{
         info.forEach((v, k) => {
             localStorage.setItem(k,v)
         });
     }
+
+	public static save(key : string, value : any) : void{
+		localStorage.setItem(key, value)
+	}
 
     public static load(key : string) : string{
         return localStorage.getItem(key)
@@ -238,6 +242,7 @@ class Game implements IDrawable{
         this.height = h
         this.width = w
         this.canvas = document.createElement("canvas");
+		this.canvas.id = "canvas"
         
         this.canvas.width = w
         this.canvas.height = h
@@ -288,7 +293,6 @@ class Game implements IDrawable{
         this.ground_blocks.forEach(element => {
             element.update()
 			if(!element.insideScreen()){
-				console.log("sumiu")
 				// tem q tirar os obstaculos dps
 				this.ground_blocks[0].obstacles.length;
 				this.ground_blocks.shift() 
@@ -349,6 +353,7 @@ class Game implements IDrawable{
 
     public run() : void
     {
+		if(this.state != GameState.playing) return
         this.update();
         this.draw();
         this.drawUI(this.state);
@@ -382,8 +387,16 @@ class Game implements IDrawable{
     }
     
     private gameOver() : void {
-        // todo: save
+		// pause game
+		window.cancelAnimationFrame(0)
+		
         // todo: show lose screen
+		UI.showUI(document.getElementById("game_over"), true)
+		UI.showUI(document.getElementById("canvas"), false)
+		
+		// show info
+		SaveSystem.save("points", this.points)
+		document.getElementById('points').innerText = this.points.toString()
     }
 
     private roundUp(num : number, precision : number) : number{
@@ -396,22 +409,35 @@ class Tutorial extends Game{
 
 }
 
-// todo: verificar se é a primeira vez jogando, se for pegar tutorial
+class UI{
+	btn_play : any
+	btn_settings : any
+	btn_options : any
+	btn_credits : any
 
-let gm = new Game(500, 500);
-gm.main()
-/*
-let t = new ManipulateFile();
-var filePath = '/mapa.json';
+	constructor(){
+		this.btn_play  = document.getElementById("p") 
+		this.btn_settings  = document.getElementById("s") 
+		this.btn_options  = document.getElementById("o") 
+		this.btn_credits  = document.getElementById("c") 
+		this.configureUI()
+	}
+	configureUI() : void{
+		this.btn_play.onclick = () => {
+			UI.showUI(document.getElementById("allthethings"), false )
+			start()
+		};
+	}
 
-$.getJSON(filePath, function( data ) {
-  $.each( data, function( key, val ) {
-    console.log(val['country']);
-  });
-});
+	static showUI(UI : any, show : boolean) : void{
+		UI.style.display = show ? "" : "none"
+	}
+}
 
-$.get('map.txt', function(data) {
-    console.log(typeof(data) );
- }, 'text');
+let u = new UI();
+let gm : Game
 
- // desenhar chão*/
+function start() : void{
+	gm = new Game(500, 500);
+	gm.main()
+}

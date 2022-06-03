@@ -30,10 +30,13 @@ class MoveableDrawable {
 }
 class SaveSystem {
     // local storage
-    static save(info) {
+    static saveArray(info) {
         info.forEach((v, k) => {
             localStorage.setItem(k, v);
         });
+    }
+    static save(key, value) {
+        localStorage.setItem(key, value);
     }
     static load(key) {
         return localStorage.getItem(key);
@@ -157,6 +160,7 @@ class Game {
         this.height = h;
         this.width = w;
         this.canvas = document.createElement("canvas");
+        this.canvas.id = "canvas";
         this.canvas.width = w;
         this.canvas.height = h;
         this.canvas.style.border = "1px solid #000";
@@ -196,7 +200,6 @@ class Game {
         this.ground_blocks.forEach(element => {
             element.update();
             if (!element.insideScreen()) {
-                console.log("sumiu");
                 // tem q tirar os obstaculos dps
                 this.ground_blocks[0].obstacles.length;
                 this.ground_blocks.shift();
@@ -241,6 +244,8 @@ class Game {
         this.run();
     }
     run() {
+        if (this.state != GameState.playing)
+            return;
         this.update();
         this.draw();
         this.drawUI(this.state);
@@ -270,8 +275,14 @@ class Game {
         this.ctx.fillText(points.toString(), 255, 100);
     }
     gameOver() {
-        // todo: save
+        // pause game
+        window.cancelAnimationFrame(0);
         // todo: show lose screen
+        UI.showUI(document.getElementById("game_over"), true);
+        UI.showUI(document.getElementById("canvas"), false);
+        // show info
+        SaveSystem.save("points", this.points);
+        document.getElementById('points').innerText = this.points.toString();
     }
     roundUp(num, precision) {
         precision = Math.pow(10, precision);
@@ -280,22 +291,28 @@ class Game {
 }
 class Tutorial extends Game {
 }
-// todo: verificar se é a primeira vez jogando, se for pegar tutorial
-let gm = new Game(500, 500);
-gm.main();
-/*
-let t = new ManipulateFile();
-var filePath = '/mapa.json';
-
-$.getJSON(filePath, function( data ) {
-  $.each( data, function( key, val ) {
-    console.log(val['country']);
-  });
-});
-
-$.get('map.txt', function(data) {
-    console.log(typeof(data) );
- }, 'text');
-
- // desenhar chão*/ 
+class UI {
+    constructor() {
+        this.btn_play = document.getElementById("p");
+        this.btn_settings = document.getElementById("s");
+        this.btn_options = document.getElementById("o");
+        this.btn_credits = document.getElementById("c");
+        this.configureUI();
+    }
+    configureUI() {
+        this.btn_play.onclick = () => {
+            UI.showUI(document.getElementById("allthethings"), false);
+            start();
+        };
+    }
+    static showUI(UI, show) {
+        UI.style.display = show ? "" : "none";
+    }
+}
+let u = new UI();
+let gm;
+function start() {
+    gm = new Game(500, 500);
+    gm.main();
+}
 //# sourceMappingURL=index.js.map
