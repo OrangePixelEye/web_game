@@ -47,6 +47,7 @@ class Player {
         this.jump_force = 15.6;
         this.gravity = 0.6;
         this.vertical_speed = 0;
+        this.can_jump = false;
         this.is_colliding = false;
         this.ctx = ctx;
         this.direction = true;
@@ -57,16 +58,15 @@ class Player {
         this.controls = control;
     }
     update() {
-        this.getInput();
         this.calcGravity();
         this.groundCollision();
+        this.getInput();
     }
     draw() {
         this.ctx.fillStyle = "#FA43D6";
         this.ctx.fillRect(this.x, this.y, this.width, this.height);
     }
     jump() {
-        // trava o pulo para apenas colisão
         if (this.is_colliding)
             this.vertical_speed = -this.jump_force;
     }
@@ -85,9 +85,10 @@ class Player {
         this.y = (this.direction ? this.y + this.vertical_speed : this.y - this.vertical_speed);
     }
     groundCollision() {
-        if (((this.y > 250 - this.height && this.direction) ||
-            (this.y < 250 && !this.direction))) {
+        if ((((this.y > 250 - this.height) && this.direction) ||
+            ((this.y < 259) && !this.direction))) {
             if (this.is_colliding) {
+                this.can_jump = true;
                 this.y = this.direction ? 240 - this.height : 260;
             }
         }
@@ -107,14 +108,14 @@ class Obstacles extends MoveableDrawable {
     randomHeight() {
         // numbers positive = down
         // numbers negative = up
-        return Math.floor(Math.random() * 51) + 10;
+        return Math.floor(Math.random() * 41) + 20;
     }
     randomY(height) {
         return Math.floor((Math.random() > 0.5 ? 0 : -height)) + 250;
     }
 }
 class GroundBlock extends MoveableDrawable {
-    constructor(c, x, y, w, h, color, s = 1.8) {
+    constructor(c, x, y, w, h, color, s = 3.3) {
         super(c, x, y, w, h);
         this.color = "#" + color;
         this.speed = s;
@@ -122,14 +123,16 @@ class GroundBlock extends MoveableDrawable {
     }
     // todo: fix this functon
     generateRandomObstacles() {
-        let obs_n = Math.floor(Math.random() * (this.width / 50)) + 1;
-        this.obs = [new Obstacles(this.ctx, 640, this.y + 10, 13, 15, "FFF", this.speed)];
-        for (let i = 0; i < obs_n; i++) {
-            this.obs.push(new Obstacles(this.ctx, this.chooseRandomPosition(), this.y + 10, 25, 1, "FFFF", this.speed));
-        }
+        let obs_ = Math.floor(Math.random() * 1) + 1;
+        this.obs = [new Obstacles(this.ctx, (Math.floor(Math.random() * 13) + this.x + 45), this.y + 10, 13, 15, "FFF", this.speed)];
+        /*
+        for(let i = 0; i <  obs_; i++)
+        {
+            this.obs.push(new Obstacles(this.ctx, this.x, this.y + 10, 25, 1, "FFFF",this.speed))
+        }*/
     }
-    chooseRandomPosition() {
-        return Math.floor(Math.random() * this.width) + this.x;
+    chooseRandomPosition(w) {
+        return Math.floor(Math.random() * w);
     }
     get obstacles() {
         return this.obs;
@@ -166,11 +169,13 @@ class Game {
         this.canvas.style.border = "1px solid #000";
         this.ctx = this.canvas.getContext("2d");
         document.body.appendChild(this.canvas);
+        this.ctx.font = '50px serif';
+    }
+    init_game() {
         this.ground_blocks = [new GroundBlock(this.ctx, 0, 240, 500, 20, "000")];
         this.obstacles = this.ground_blocks[0].obstacles;
         this.appendBlock(new GroundBlock(this.ctx, 570, 240, 100, 20, "ABC"));
-        this.obstacles.concat(this.ground_blocks[1].obstacles);
-        this.ctx.font = '50px serif';
+        this.obstacles = this.obstacles.concat(this.ground_blocks[1].obstacles);
         this._player = new Player(this.ctx, new Controls());
         this.state = GameState.playing;
         this.points = 0;
@@ -192,16 +197,17 @@ class Game {
     }
     update() {
         this.points++;
+        this._player.update();
         this.verifyCollisions();
         this.updateMap();
-        this._player.update();
     }
     updateMap() {
         this.ground_blocks.forEach(element => {
             element.update();
             if (!element.insideScreen()) {
                 // tem q tirar os obstaculos dps
-                this.ground_blocks[0].obstacles.length;
+                for (let i = 0; i < element.obstacles.length; i++)
+                    this.obstacles.shift();
                 this.ground_blocks.shift();
                 this.generateNewBlock();
             }
@@ -211,8 +217,9 @@ class Game {
         this._player.is_colliding = Game.detectCollision(this._player, this.ground_blocks[0]);
     }
     generateNewBlock() {
-        this.appendBlock(new GroundBlock(this.ctx, 350, 240, 100, 20, "ABC"));
-        this.obstacles.concat(this.ground_blocks[1].obstacles);
+        // se baseia no width e position do anterior
+        this.appendBlock(new GroundBlock(this.ctx, this.ground_blocks[this.ground_blocks.length - 1].x + 280, 240, (Math.floor(Math.random() * 190) + 50), 20, "FFF"));
+        this.obstacles = this.obstacles.concat(this.ground_blocks[this.ground_blocks.length - 1].obstacles);
     }
     verifyCollisions() {
         if (this.obstacles === undefined)
@@ -275,21 +282,23 @@ class Game {
         this.ctx.fillText(points.toString(), 255, 100);
     }
     gameOver() {
+        let show_text = this.points.toString();
         // pause game
         window.cancelAnimationFrame(0);
         // todo: show lose screen
         UI.showUI(document.getElementById("game_over"), true);
         UI.showUI(document.getElementById("canvas"), false);
         // show info
-        SaveSystem.save("points", this.points);
-        document.getElementById('points').innerText = this.points.toString();
+        if (Number(SaveSystem.load("points")) < this.points) {
+            SaveSystem.save("points", this.points);
+            show_text += " é um novo record !";
+        }
+        document.getElementById('points').innerText = show_text;
     }
     roundUp(num, precision) {
         precision = Math.pow(10, precision);
         return Math.ceil(num * precision) / precision;
     }
-}
-class Tutorial extends Game {
 }
 class UI {
     constructor() {
@@ -297,11 +306,19 @@ class UI {
         this.btn_settings = document.getElementById("s");
         this.btn_options = document.getElementById("o");
         this.btn_credits = document.getElementById("c");
+        this.btn_play_again = document.getElementById("play_again");
+        UI.showUI(document.getElementById("canvas"), false);
         this.configureUI();
     }
     configureUI() {
         this.btn_play.onclick = () => {
             UI.showUI(document.getElementById("allthethings"), false);
+            UI.showUI(document.getElementById("canvas"), true);
+            start();
+        };
+        this.btn_play_again.onclick = () => {
+            UI.showUI(document.getElementById("game_over"), false);
+            UI.showUI(document.getElementById("canvas"), true);
             start();
         };
     }
@@ -309,10 +326,12 @@ class UI {
         UI.style.display = show ? "" : "none";
     }
 }
-let u = new UI();
 let gm;
+gm = new Game(500, 500);
+gm.state = GameState.playing;
+let u = new UI();
 function start() {
-    gm = new Game(500, 500);
+    gm.init_game();
     gm.main();
 }
 //# sourceMappingURL=index.js.map

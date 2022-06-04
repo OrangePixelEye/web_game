@@ -4,9 +4,6 @@
  */
 // tsc -w no terminal para watch
 
-// todo: styles
-// todo: complete a save
-// todo: tutorial
 // todo: level generation
 
 
@@ -86,7 +83,7 @@ class Player implements IDrawable{
     private jump_force = 15.6;
     private gravity = 0.6;
     private vertical_speed = 0;
-
+	can_jump = false;
     public is_colliding : boolean = false;
     
     constructor(ctx : CanvasRenderingContext2D, control : Controls){
@@ -99,10 +96,10 @@ class Player implements IDrawable{
         this.controls = control
     }
     update() : void {
-        this.getInput();
-        
         this.calcGravity();
         this.groundCollision();
+		
+		this.getInput();
     }
     draw() : void {
         this.ctx.fillStyle = "#FA43D6"
@@ -110,9 +107,8 @@ class Player implements IDrawable{
     }
     
     public jump() : void {
-        // trava o pulo para apenas colisão
-        if(this.is_colliding)
-            this.vertical_speed = -this.jump_force
+		if(this.is_colliding)
+        	this.vertical_speed = -this.jump_force
     }
 
     private invert() : void {
@@ -132,11 +128,12 @@ class Player implements IDrawable{
 
     private groundCollision() :void {
         if (
-            ((this.y > 250 - this.height && this.direction) || 
-            (this.y < 250  && !this.direction))
+            (((this.y > 250 - this.height) && this.direction) || 
+            ((this.y < 259)  && !this.direction))
             ) {
                 if(this.is_colliding){
-                    this.y = this.direction ? 240 - this.height : 260
+					this.can_jump = true
+					this.y = this.direction ? 240 - this.height : 260
                 }
         }
         if(this.y > 300 && this.direction) this.invert()
@@ -157,7 +154,7 @@ class Obstacles extends MoveableDrawable{
     {
         // numbers positive = down
         // numbers negative = up
-        return Math.floor(Math.random() * 51) + 10;
+        return Math.floor(Math.random() * 41) + 20;
     }
 
     private randomY(height : number) : number {
@@ -171,7 +168,7 @@ class GroundBlock extends MoveableDrawable{
     private obs : Obstacles[];
     speed : number;
 
-    constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number, color : string, s : number = 1.8)
+    constructor(c : CanvasRenderingContext2D, x: number, y: number, w: number, h : number, color : string, s : number = 3.3)
     {
         super(c,x,y,w,h)
         this.color = "#" + color
@@ -180,23 +177,22 @@ class GroundBlock extends MoveableDrawable{
     }
 
     // todo: fix this functon
-    private generateRandomObstacles() : void{
-        let obs_n = Math.floor(Math.random() * (this.width / 50)) + 1;
-        
-        this.obs = [new Obstacles(this.ctx, 640, this.y + 10, 13, 15, "FFF",this.speed)]
-        
-        for(let i = 0; i < obs_n; i++)
+    private generateRandomObstacles() : void{		
+		let obs_ = Math.floor(Math.random() * 1) + 1;
+        this.obs = [new Obstacles(this.ctx, (Math.floor(Math.random() * 13) + this.x + 45), this.y + 10, 13, 15, "FFF",this.speed)]
+        /*
+        for(let i = 0; i <  obs_; i++)
         {
-            this.obs.push(new Obstacles(this.ctx,this.chooseRandomPosition(), this.y + 10, 25, 1, "FFFF",this.speed))
-        }
+            this.obs.push(new Obstacles(this.ctx, this.x, this.y + 10, 25, 1, "FFFF",this.speed))
+        }*/
         
     }
 
-    private chooseRandomPosition() : number{
-        return Math.floor(Math.random() * this.width) + this.x;
+    private chooseRandomPosition(w : number) : number{
+        return Math.floor(Math.random() * w);
     }
 
-    public get obstacles()
+    public get obstacles() : Obstacles[]
     {
         return this.obs;
     } 
@@ -251,17 +247,19 @@ class Game implements IDrawable{
         this.ctx = this.canvas.getContext("2d")
         document.body.appendChild(this.canvas)
         
-        this.ground_blocks = [new GroundBlock(this.ctx, 0, 240, 500, 20,"000")]
+        this.ctx.font = '50px serif';
+    }
+
+	public init_game() : void{
+		this.ground_blocks = [new GroundBlock(this.ctx, 0, 240, 500, 20,"000")]
         this.obstacles = this.ground_blocks[0].obstacles;
         
         this.appendBlock(new GroundBlock( this.ctx, 570, 240 , 100, 20, "ABC"))
-        this.obstacles.concat(this.ground_blocks[1].obstacles)
-        
-        this.ctx.font = '50px serif';
-        this._player = new Player(this.ctx, new Controls());
+        this.obstacles = this.obstacles.concat(this.ground_blocks[1].obstacles)
+		this._player = new Player(this.ctx, new Controls());
         this.state = GameState.playing
         this.points = 0
-    }
+	}
 
     public get player()
     {
@@ -284,22 +282,23 @@ class Game implements IDrawable{
     
     update() : void {
         this.points++;
+		this._player.update();
         this.verifyCollisions();
         this.updateMap();
            
-        this._player.update();
+        
     }
     updateMap() : void{
         this.ground_blocks.forEach(element => {
             element.update()
 			if(!element.insideScreen()){
 				// tem q tirar os obstaculos dps
-				this.ground_blocks[0].obstacles.length;
+				for(let i = 0; i < element.obstacles.length;i++)
+					this.obstacles.shift()
 				this.ground_blocks.shift() 
 				this.generateNewBlock();
 			}
         });
-		  
 
         this.obstacles.forEach(e => e.update());
 
@@ -309,8 +308,9 @@ class Game implements IDrawable{
     }
 
 	generateNewBlock() : void{
-		this.appendBlock(new GroundBlock( this.ctx, 350, 240 , 100, 20, "ABC"))
-        this.obstacles.concat(this.ground_blocks[1].obstacles)
+		// se baseia no width e position do anterior
+		this.appendBlock(new GroundBlock( this.ctx, this.ground_blocks[this.ground_blocks.length - 1].x + 280, 240 , (Math.floor(Math.random() * 190) + 50), 20, "FFF"))
+		this.obstacles = this.obstacles.concat(this.ground_blocks[this.ground_blocks.length - 1].obstacles)
 	}
 
     verifyCollisions() : void{
@@ -387,6 +387,7 @@ class Game implements IDrawable{
     }
     
     private gameOver() : void {
+		let show_text : string = this.points.toString()
 		// pause game
 		window.cancelAnimationFrame(0)
 		
@@ -395,18 +396,18 @@ class Game implements IDrawable{
 		UI.showUI(document.getElementById("canvas"), false)
 		
 		// show info
-		SaveSystem.save("points", this.points)
-		document.getElementById('points').innerText = this.points.toString()
-    }
+		if(Number(SaveSystem.load("points")) < this.points){
+			SaveSystem.save("points", this.points)
+			show_text += " é um novo record !"
+		}
+		document.getElementById('points').innerText = show_text
+		
+	}
 
     private roundUp(num : number, precision : number) : number{
         precision = Math.pow(10, precision)
         return Math.ceil(num * precision) / precision
     }
-}
-
-class Tutorial extends Game{
-
 }
 
 class UI{
@@ -415,18 +416,31 @@ class UI{
 	btn_options : any
 	btn_credits : any
 
+	btn_play_again : any
+	
+
 	constructor(){
 		this.btn_play  = document.getElementById("p") 
 		this.btn_settings  = document.getElementById("s") 
 		this.btn_options  = document.getElementById("o") 
 		this.btn_credits  = document.getElementById("c") 
+		this.btn_play_again = document.getElementById("play_again")
+		UI.showUI(document.getElementById("canvas"), false)
 		this.configureUI()
 	}
 	configureUI() : void{
 		this.btn_play.onclick = () => {
-			UI.showUI(document.getElementById("allthethings"), false )
+			UI.showUI(document.getElementById("allthethings"), false)
+			UI.showUI(document.getElementById("canvas"), true)
+
 			start()
 		};
+		this.btn_play_again.onclick = () => {
+			UI.showUI(document.getElementById("game_over"), false);
+			UI.showUI(document.getElementById("canvas"), true)
+
+			start()
+		}
 	}
 
 	static showUI(UI : any, show : boolean) : void{
@@ -434,10 +448,13 @@ class UI{
 	}
 }
 
-let u = new UI();
+
 let gm : Game
+gm = new Game(500, 500);
+gm.state = GameState.playing
+let u = new UI();
 
 function start() : void{
-	gm = new Game(500, 500);
+	gm.init_game()
 	gm.main()
 }
