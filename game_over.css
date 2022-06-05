@@ -71,7 +71,7 @@
 	width: 350px;
 	height: auto;
 	padding-top: 60px;
-	background: none;
+	background: none;	
 }
 
 .gameover p {
@@ -79,7 +79,7 @@
 	margin-bottom: 0px;
 	margin-left: 120px;
 	font-size: 35px;
-	font-family: 'Black Ops One', cursive;
+	font-family: 'Fantasy', impact;
 	line-height: 60px;
 	text-align: center;
 	text-shadow: 5px 5px #000000;
@@ -87,7 +87,7 @@
 }
 
 .continue {
-	width: 750px;
+	width: 450px;
 	height: auto;
 	padding-top: 40px;
 }
