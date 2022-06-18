@@ -2,9 +2,10 @@
  * let img = document.getElementById("imgSource");
     ctx.drawImage(img, 50, 50);
  */
-// tsc -w no terminal para watch
+// tsc -w no terminal para watch ctrl shift b watch
+// npx webpack serve
 
-import { Game, GameState } from './model/game/Game';
+import { Game, GameState } from '../src/model/game/Game';
 
 export class UI{
 	btn_play : any
@@ -28,7 +29,8 @@ export class UI{
 		this.btn_play.onclick = () => {
 			UI.showUI(document.getElementById("allthethings"), false)
 			UI.showUI(document.getElementById("canvas"), true)
-
+            console.log("asfdasdfsd");
+			
 			start()
 		};
 		this.btn_play_again.onclick = () => {

@@ -4,7 +4,10 @@ import { IDrawable } from '../../interfaces/IDrawable';
 import { MoveableDrawable } from '../moveable_drawable/MovebleDrawable';
 import { GroundBlock } from '../ground_blocks/GroundBlocks';
 import { Controls } from '../controls/Controls';
-import { UI } from '../..';
+
+
+import { UI } from '../../../public/index'
+
 
 export enum GameState{
     playing,

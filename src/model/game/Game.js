@@ -5,7 +5,7 @@ const SaveSystem_1 = require("../save/SaveSystem");
 const Player_1 = require("../player/Player");
 const GroundBlocks_1 = require("../ground_blocks/GroundBlocks");
 const Controls_1 = require("../controls/Controls");
-const __1 = require("../..");
+const index_1 = require("../../../public/index");
 var GameState;
 (function (GameState) {
     GameState[GameState["playing"] = 0] = "playing";
@@ -140,8 +140,8 @@ class Game {
         // pause game
         window.cancelAnimationFrame(0);
         // todo: show lose screen
-        __1.UI.showUI(document.getElementById("game_over"), true);
-        __1.UI.showUI(document.getElementById("canvas"), false);
+        index_1.UI.showUI(document.getElementById("game_over"), true);
+        index_1.UI.showUI(document.getElementById("canvas"), false);
         // show info
         if (Number(SaveSystem_1.SaveSystem.load("points")) < this.points) {
             SaveSystem_1.SaveSystem.save("points", this.points);

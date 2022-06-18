@@ -3,10 +3,11 @@
  * let img = document.getElementById("imgSource");
     ctx.drawImage(img, 50, 50);
  */
-// tsc -w no terminal para watch
+// tsc -w no terminal para watch ctrl shift b watch
+// npx webpack serve
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UI = void 0;
-const Game_1 = require("./model/game/Game");
+const Game_1 = require("../src/model/game/Game");
 class UI {
     constructor() {
         this.btn_play = document.getElementById("p");
@@ -21,6 +22,7 @@ class UI {
         this.btn_play.onclick = () => {
             UI.showUI(document.getElementById("allthethings"), false);
             UI.showUI(document.getElementById("canvas"), true);
+            console.log("asfdasdfsd");
             start();
         };
         this.btn_play_again.onclick = () => {
