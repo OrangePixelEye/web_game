@@ -1,10 +1,8 @@
 # web_game
 Jogo para matéria de jogos para web
 Quando for baixar lembra de usar:
-```npm install -g typescript```
-```npm install --save-dev @types/jquery```
+```npm install``
 
-
-para instalar o typescript e:
-```tsc```
-para compilar o typescript
+Se for adicionar funcionalidades:
+```tsc -w``
+```npx webpack serve``
