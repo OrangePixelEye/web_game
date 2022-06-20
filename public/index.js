@@ -14,6 +14,8 @@ class UI {
         this.btn_settings = document.getElementById("s");
         this.btn_options = document.getElementById("o");
         this.btn_credits = document.getElementById("c");
+        this.btn_exit = document.getElementById("exit");
+        this.btn_menu = document.getElementById("menu");
         this.btn_play_again = document.getElementById("play_again");
         UI.showUI(document.getElementById("canvas"), false);
         this.configureUI();
@@ -22,13 +24,19 @@ class UI {
         this.btn_play.onclick = () => {
             UI.showUI(document.getElementById("allthethings"), false);
             UI.showUI(document.getElementById("canvas"), true);
-            console.log("asfdasdfsd");
             start();
         };
         this.btn_play_again.onclick = () => {
             UI.showUI(document.getElementById("game_over"), false);
             UI.showUI(document.getElementById("canvas"), true);
             start();
+        };
+        this.btn_menu.onclick = () => {
+            UI.showUI(document.getElementById("game_over"), false);
+            UI.showUI(document.getElementById("allthethings"), true);
+        };
+        this.btn_exit.onclick = () => {
+            close();
         };
     }
     static showUI(UI, show) {

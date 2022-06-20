@@ -8,12 +8,14 @@
 import { Game, GameState } from '../src/model/game/Game';
 
 export class UI{
-	btn_play : any
-	btn_settings : any
-	btn_options : any
-	btn_credits : any
+	btn_play : HTMLElement
+	btn_settings : HTMLElement
+	btn_options : HTMLElement
+	btn_credits : HTMLElement
+	btn_exit : HTMLElement
 
-	btn_play_again : any
+	btn_play_again : HTMLElement
+	btn_menu : HTMLElement
 	
 
 	constructor(){
@@ -21,7 +23,11 @@ export class UI{
 		this.btn_settings  = document.getElementById("s") 
 		this.btn_options  = document.getElementById("o") 
 		this.btn_credits  = document.getElementById("c") 
+		this.btn_exit = document.getElementById("exit")
+		
+		this.btn_menu = document.getElementById("menu")
 		this.btn_play_again = document.getElementById("play_again")
+		
 		UI.showUI(document.getElementById("canvas"), false)
 		this.configureUI()
 	}
@@ -29,7 +35,6 @@ export class UI{
 		this.btn_play.onclick = () => {
 			UI.showUI(document.getElementById("allthethings"), false)
 			UI.showUI(document.getElementById("canvas"), true)
-            console.log("asfdasdfsd");
 			
 			start()
 		};
@@ -39,6 +44,16 @@ export class UI{
 
 			start()
 		}
+
+		this.btn_menu.onclick = () => {
+			UI.showUI(document.getElementById("game_over"), false);
+			UI.showUI(document.getElementById("allthethings"), true)
+		}
+		this.btn_exit.onclick = () => {
+			close()
+		}
+
+
 	}
 
 	static showUI(UI : any, show : boolean) : void{
