@@ -22,7 +22,7 @@ class UI {
     configureUI() {
         this.btn_settings.onclick = () => {
             UI.showUI(document.getElementById("allthethings"), false);
-            UI.showUI(document.getElementById("settings"), true);
+            UI.showUI(document.getElementById("ui-settings"), true);
         };
         this.btn_credits.onclick = () => {
             UI.showUI(document.getElementById("allthethings"), false);
@@ -49,6 +49,10 @@ class UI {
     static showUI(UI, show) {
         UI.style.display = show ? "" : "none";
     }
+    static showMenu(old_screen) {
+        this.showUI(document.getElementById(old_screen), false);
+        UI.showUI(document.getElementById("allthethings"), true);
+    }
 }
 exports.UI = UI;
 let gm;
@@ -58,5 +62,8 @@ let u = new UI();
 function start() {
     gm.init_game();
     gm.main();
+}
+function openMenu(menu) {
+    UI.showMenu(menu);
 }
 //# sourceMappingURL=index.js.map

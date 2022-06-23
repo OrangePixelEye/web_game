@@ -33,7 +33,7 @@
 			<button class="btn_menu" id="e">EXIT</button>
 		</div>
 		<div id="right"></div>
-<!-- 
+		<!-- 
 		<div id="exit"></div>
 		<div id="circle"></div> -->
 	</div>
@@ -57,12 +57,20 @@
 			<button id="menu" class="btn_restart">Menu</button>
 		</div>
 	</div>
+	<div id="ui-settings" style="display: none;">
 
-	<div id="credits" style="display: none;">
-
+		<input type="range" id="configure-music" name="configure-music" min="0" max="100" value="50" step="10">
+		<label for="configure-music">Music</label>
+		<button id="configure-reset">Reset highscore:</button>
+		<!-- talvez não vai dar para trocar -->
+		<button id="configure-input">Change jump button</button>
+		<button id="back_menu" onclick="openMenu('ui-settings')">Back to menu</button>
 	</div>
-	<div id="settings" style="display: none;">
-
+	<div id="credits" style="display: none;">
+		<p>
+			Desenvolvedores:
+		</p>
+		<button id="back_menu">Back to menu</button>
 	</div>
 
 

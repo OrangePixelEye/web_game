@@ -14,6 +14,9 @@ export class UI{
 	btn_settings : HTMLElement
 	btn_credits : HTMLElement
 	btn_exit : HTMLElement
+	
+	// credits and settings menu
+	btn_back_to_menu : HTMLElement
 
 	// lose screen
 	btn_play_again : HTMLElement
@@ -36,7 +39,7 @@ export class UI{
 	configureUI() : void{
 		this.btn_settings.onclick = () => {
 			UI.showUI(document.getElementById("allthethings"), false)
-			UI.showUI(document.getElementById("settings"), true)
+			UI.showUI(document.getElementById("ui-settings"), true)
 		}
 		
 		this.btn_credits.onclick = () => {
@@ -67,9 +70,14 @@ export class UI{
 			close()
 		}
 	}
-
+	
 	static showUI(UI : any, show : boolean) : void{
 		UI.style.display = show ? "" : "none"
+	}
+	
+	static showMenu(old_screen : any) :void {
+		this.showUI(document.getElementById(old_screen), false)
+		UI.showUI(document.getElementById("allthethings"), true)
 	}
 }
 
@@ -81,4 +89,8 @@ let u = new UI();
 function start() : void{
 	gm.init_game()
 	gm.main()
+}
+
+function openMenu(menu) {
+	UI.showMenu(menu)
 }
