@@ -11,16 +11,23 @@ const Game_1 = require("../src/model/game/Game");
 class UI {
     constructor() {
         this.btn_play = document.getElementById("p");
-        this.btn_settings = document.getElementById("s");
-        this.btn_options = document.getElementById("o");
+        this.btn_settings = document.getElementById("settings");
         this.btn_credits = document.getElementById("c");
-        this.btn_exit = document.getElementById("exit");
+        this.btn_exit = document.getElementById("e");
         this.btn_menu = document.getElementById("menu");
         this.btn_play_again = document.getElementById("play_again");
         UI.showUI(document.getElementById("canvas"), false);
         this.configureUI();
     }
     configureUI() {
+        this.btn_settings.onclick = () => {
+            UI.showUI(document.getElementById("allthethings"), false);
+            UI.showUI(document.getElementById("settings"), true);
+        };
+        this.btn_credits.onclick = () => {
+            UI.showUI(document.getElementById("allthethings"), false);
+            UI.showUI(document.getElementById("credits"), true);
+        };
         this.btn_play.onclick = () => {
             UI.showUI(document.getElementById("allthethings"), false);
             UI.showUI(document.getElementById("canvas"), true);

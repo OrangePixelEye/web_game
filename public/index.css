@@ -4,7 +4,7 @@ body {
     background: black;
 }
 
-#exit {
+/* #exit {
     height: 30px;
     width: 30px;
     background: #006680;
@@ -62,7 +62,7 @@ body {
 
 #exit:hover {
     background: #7A0000;
-}
+} */
 
 #single {
     position: relative;

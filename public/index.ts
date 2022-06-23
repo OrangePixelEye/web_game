@@ -8,22 +8,23 @@
 import { Game, GameState } from '../src/model/game/Game';
 
 export class UI{
+	// todo: divide the ui in multiple files
+	// main
 	btn_play : HTMLElement
 	btn_settings : HTMLElement
-	btn_options : HTMLElement
 	btn_credits : HTMLElement
 	btn_exit : HTMLElement
 
+	// lose screen
 	btn_play_again : HTMLElement
 	btn_menu : HTMLElement
 	
 
 	constructor(){
 		this.btn_play  = document.getElementById("p") 
-		this.btn_settings  = document.getElementById("s") 
-		this.btn_options  = document.getElementById("o") 
+		this.btn_settings  = document.getElementById("settings")
 		this.btn_credits  = document.getElementById("c") 
-		this.btn_exit = document.getElementById("exit")
+		this.btn_exit = document.getElementById("e")
 		
 		this.btn_menu = document.getElementById("menu")
 		this.btn_play_again = document.getElementById("play_again")
@@ -31,13 +32,25 @@ export class UI{
 		UI.showUI(document.getElementById("canvas"), false)
 		this.configureUI()
 	}
+
 	configureUI() : void{
+		this.btn_settings.onclick = () => {
+			UI.showUI(document.getElementById("allthethings"), false)
+			UI.showUI(document.getElementById("settings"), true)
+		}
+		
+		this.btn_credits.onclick = () => {
+			UI.showUI(document.getElementById("allthethings"), false)
+			UI.showUI(document.getElementById("credits"), true)
+		}
+
 		this.btn_play.onclick = () => {
 			UI.showUI(document.getElementById("allthethings"), false)
 			UI.showUI(document.getElementById("canvas"), true)
 			
 			start()
 		};
+
 		this.btn_play_again.onclick = () => {
 			UI.showUI(document.getElementById("game_over"), false);
 			UI.showUI(document.getElementById("canvas"), true)
@@ -49,11 +62,10 @@ export class UI{
 			UI.showUI(document.getElementById("game_over"), false);
 			UI.showUI(document.getElementById("allthethings"), true)
 		}
+		
 		this.btn_exit.onclick = () => {
 			close()
 		}
-
-
 	}
 
 	static showUI(UI : any, show : boolean) : void{
