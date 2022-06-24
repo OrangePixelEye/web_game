@@ -16,42 +16,45 @@ class UI {
         this.btn_exit = document.getElementById("e");
         this.btn_menu = document.getElementById("menu");
         this.btn_play_again = document.getElementById("play_again");
+        this.btn_back_to_menu = document.getElementsByName("back_menu");
         UI.showUI(document.getElementById("canvas"), false);
         this.configureUI();
     }
     configureUI() {
         this.btn_settings.onclick = () => {
-            UI.showUI(document.getElementById("allthethings"), false);
-            UI.showUI(document.getElementById("ui-settings"), true);
+            UI.showMenu("allthethings", "ui-settings");
         };
         this.btn_credits.onclick = () => {
-            UI.showUI(document.getElementById("allthethings"), false);
-            UI.showUI(document.getElementById("credits"), true);
+            UI.showMenu("allthethings", "ui-credits");
         };
         this.btn_play.onclick = () => {
-            UI.showUI(document.getElementById("allthethings"), false);
-            UI.showUI(document.getElementById("canvas"), true);
+            UI.showMenu("allthethings", "canvas");
             start();
         };
         this.btn_play_again.onclick = () => {
-            UI.showUI(document.getElementById("game_over"), false);
-            UI.showUI(document.getElementById("canvas"), true);
+            UI.showMenu("game_over", "canvas");
             start();
         };
         this.btn_menu.onclick = () => {
-            UI.showUI(document.getElementById("game_over"), false);
-            UI.showUI(document.getElementById("allthethings"), true);
+            UI.showMenu("game_over", "allthethings");
         };
         this.btn_exit.onclick = () => {
             close();
         };
+        this.btn_back_to_menu.forEach((e) => {
+            e.onclick = event => {
+                let name = "ui-";
+                name += event.target.dataset.screen;
+                UI.showMenu(name, "allthethings");
+            };
+        });
     }
     static showUI(UI, show) {
         UI.style.display = show ? "" : "none";
     }
-    static showMenu(old_screen) {
-        this.showUI(document.getElementById(old_screen), false);
-        UI.showUI(document.getElementById("allthethings"), true);
+    static showMenu(old_screen, new_screen) {
+        UI.showUI(document.getElementById(old_screen), false);
+        UI.showUI(document.getElementById(new_screen), true);
     }
 }
 exports.UI = UI;
@@ -63,7 +66,8 @@ function start() {
     gm.init_game();
     gm.main();
 }
-function openMenu(menu) {
-    UI.showMenu(menu);
+function openMenu(event) {
+    console.log(event);
+    //UI.showMenu(menu)
 }
 //# sourceMappingURL=index.js.map
