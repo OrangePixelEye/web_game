@@ -8,6 +8,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UI = void 0;
 const Game_1 = require("../src/model/game/Game");
+const SaveSystem_1 = require("../src/model/save/SaveSystem");
 class UI {
     constructor() {
         this.btn_play = document.getElementById("p");
@@ -17,6 +18,7 @@ class UI {
         this.btn_menu = document.getElementById("menu");
         this.btn_play_again = document.getElementById("play_again");
         this.btn_back_to_menu = document.getElementsByName("back_menu");
+        this.btn_reset_points = document.getElementById("configure-reset");
         UI.showUI(document.getElementById("canvas"), false);
         this.configureUI();
     }
@@ -30,6 +32,12 @@ class UI {
         this.btn_play.onclick = () => {
             UI.showMenu("allthethings", "canvas");
             start();
+        };
+        this.btn_reset_points.onclick = () => {
+            const save_map = new Map([
+                ['points', '0']
+            ]);
+            SaveSystem_1.SaveSystem.saveArray(save_map);
         };
         this.btn_play_again.onclick = () => {
             UI.showMenu("game_over", "canvas");

@@ -11,6 +11,6 @@ export abstract class SaveSystem{
 	}
 
     public static load(key : string) : string{
-        return localStorage.getItem(key)
+        return localStorage.getItem(key) ?? '';
     }
 }

@@ -12,7 +12,8 @@ class SaveSystem {
         localStorage.setItem(key, value);
     }
     static load(key) {
-        return localStorage.getItem(key);
+        var _a;
+        return (_a = localStorage.getItem(key)) !== null && _a !== void 0 ? _a : '';
     }
 }
 exports.SaveSystem = SaveSystem;

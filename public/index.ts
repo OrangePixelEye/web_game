@@ -6,6 +6,7 @@
 // npx webpack serve
 
 import { Game, GameState } from '../src/model/game/Game';
+import { SaveSystem } from '../src/model/save/SaveSystem';
 
 export class UI{
 	// todo: divide the ui in multiple files
@@ -17,6 +18,7 @@ export class UI{
 	
 	// credits and settings menu
 	btn_back_to_menu : NodeListOf<HTMLElement>
+	btn_reset_points : HTMLElement
 
 	// lose screen
 	btn_play_again : HTMLElement
@@ -33,7 +35,7 @@ export class UI{
 		this.btn_play_again = document.getElementById("play_again")
 		
 		this.btn_back_to_menu = document.getElementsByName("back_menu")
-
+		this.btn_reset_points = document.getElementById("configure-reset")
 
 		UI.showUI(document.getElementById("canvas"), false)
 		this.configureUI()
@@ -50,9 +52,16 @@ export class UI{
 
 		this.btn_play.onclick = () => {
 			UI.showMenu("allthethings", "canvas")
-			
 			start()
 		};
+
+		this.btn_reset_points.onclick = () => {
+			const save_map = new Map([
+				['points', '0']
+			])
+			SaveSystem.saveArray(save_map)
+			
+		}
 
 		this.btn_play_again.onclick = () => {
 			UI.showMenu("game_over", "canvas")
