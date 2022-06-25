@@ -22,7 +22,11 @@ class UI {
         UI.showUI(document.getElementById("canvas"), false);
         this.configureUI();
     }
+    updateElementText(element, n_value) {
+        element.innerText = n_value;
+    }
     configureUI() {
+        this.updateElementText(this.btn_reset_points, 'Reset highscore: ' + SaveSystem_1.SaveSystem.load('points'));
         this.btn_settings.onclick = () => {
             UI.showMenu("allthethings", "ui-settings");
         };
@@ -38,6 +42,7 @@ class UI {
                 ['points', '0']
             ]);
             SaveSystem_1.SaveSystem.saveArray(save_map);
+            this.updateElementText(this.btn_reset_points, 'Reset highscore: ' + SaveSystem_1.SaveSystem.load('points'));
         };
         this.btn_play_again.onclick = () => {
             UI.showMenu("game_over", "canvas");
@@ -57,10 +62,14 @@ class UI {
             };
         });
     }
+    static reconfigureUI() {
+        new UI().configureUI();
+    }
     static showUI(UI, show) {
         UI.style.display = show ? "" : "none";
     }
     static showMenu(old_screen, new_screen) {
+        UI.reconfigureUI();
         UI.showUI(document.getElementById(old_screen), false);
         UI.showUI(document.getElementById(new_screen), true);
     }

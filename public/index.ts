@@ -41,7 +41,12 @@ export class UI{
 		this.configureUI()
 	}
 
-	configureUI() : void{
+	updateElementText(element : HTMLElement, n_value : string) : void {
+		element.innerText = n_value
+	}
+
+	public configureUI() : void{
+		this.updateElementText(this.btn_reset_points, 'Reset highscore: ' + SaveSystem.load('points'))
 		this.btn_settings.onclick = () => {
 			UI.showMenu("allthethings", "ui-settings")
 		}
@@ -49,18 +54,18 @@ export class UI{
 		this.btn_credits.onclick = () => {
 			UI.showMenu("allthethings", "ui-credits")
 		}
-
+		
 		this.btn_play.onclick = () => {
 			UI.showMenu("allthethings", "canvas")
 			start()
 		};
-
+		
 		this.btn_reset_points.onclick = () => {
 			const save_map = new Map([
 				['points', '0']
 			])
 			SaveSystem.saveArray(save_map)
-			
+			this.updateElementText(this.btn_reset_points, 'Reset highscore: ' + SaveSystem.load('points'))
 		}
 
 		this.btn_play_again.onclick = () => {
@@ -83,12 +88,17 @@ export class UI{
 			}
 		})
 	}
+
+	static reconfigureUI() : void {
+		new UI().configureUI()
+	}
 	
 	static showUI(UI : any, show : boolean) : void{
 		UI.style.display = show ? "" : "none"
 	}
 	
 	static showMenu(old_screen : string, new_screen: string) :void {
+		UI.reconfigureUI()
 		UI.showUI(document.getElementById(old_screen), false)
 		UI.showUI(document.getElementById(new_screen), true)
 	}
