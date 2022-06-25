@@ -26,6 +26,7 @@ export class Game implements IDrawable{
     height: number;
     width: number;
     points : number;
+    high_score : string;
 
     constructor(h, w){
         this.height = h
@@ -39,12 +40,12 @@ export class Game implements IDrawable{
         
         this.ctx = this.canvas.getContext("2d")
         document.body.appendChild(this.canvas)
-        
         this.ctx.font = '50px serif';
     }
-
+    
 	public init_game() : void{
-		this.ground_blocks = [new GroundBlock(this.ctx, 0, 240, 500, 20,"000")]
+        this.ground_blocks = [new GroundBlock(this.ctx, 0, 240, 500, 20,"000")]
+        this.high_score = SaveSystem.load("points")
         this.obstacles = this.ground_blocks[0].obstacles;
         
         this.appendBlock(new GroundBlock( this.ctx, 570, 240 , 100, 20, "ABC"))
@@ -77,10 +78,9 @@ export class Game implements IDrawable{
         this.points++;
 		this._player.update();
         this.verifyCollisions();
-        this.updateMap();
-           
-        
+        this.updateMap();        
     }
+
     updateMap() : void{
         this.ground_blocks.forEach(element => {
             element.update()
@@ -163,6 +163,7 @@ export class Game implements IDrawable{
         switch(state){
             case GameState.playing:
                 this.updateScreenPoints(this.points)
+                this.showHighscore()
                 break;
             case GameState.lose:
                 this.gameOver();
@@ -173,6 +174,9 @@ export class Game implements IDrawable{
             default:
                 throw "Undefined status"
         }
+    }
+    public showHighscore() : void {
+        this.ctx.fillText(this.high_score, 25, 100)
     }
 
     public updateScreenPoints(points : number) : void {

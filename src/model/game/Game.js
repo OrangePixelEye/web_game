@@ -27,6 +27,7 @@ class Game {
     }
     init_game() {
         this.ground_blocks = [new GroundBlocks_1.GroundBlock(this.ctx, 0, 240, 500, 20, "000")];
+        this.high_score = SaveSystem_1.SaveSystem.load("points");
         this.obstacles = this.ground_blocks[0].obstacles;
         this.appendBlock(new GroundBlocks_1.GroundBlock(this.ctx, 570, 240, 100, 20, "ABC"));
         this.obstacles = this.obstacles.concat(this.ground_blocks[1].obstacles);
@@ -121,6 +122,7 @@ class Game {
         switch (state) {
             case GameState.playing:
                 this.updateScreenPoints(this.points);
+                this.showHighscore();
                 break;
             case GameState.lose:
                 this.gameOver();
@@ -131,6 +133,9 @@ class Game {
             default:
                 throw "Undefined status";
         }
+    }
+    showHighscore() {
+        this.ctx.fillText(this.high_score, 25, 100);
     }
     updateScreenPoints(points) {
         this.ctx.fillText(points.toString(), 255, 100);
