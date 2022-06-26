@@ -6,6 +6,7 @@
 // npx webpack serve
 
 import { Game, GameState } from '../src/model/game/Game';
+import MusicPlayer from './Music';
 import { SaveSystem } from '../src/model/save/SaveSystem';
 
 export class UI{
