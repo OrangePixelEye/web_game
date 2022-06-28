@@ -8,7 +8,7 @@ Se for adicionar funcionalidades:
 ```npx webpack serve``
 
 ## todo
-- [ ] colocar musica
+- [x] colocar musica na tela do jogo
 - [ ] configurar volume da musica
 - [ ] colocar som no pulo
 - [ ] colocar musica no menu
