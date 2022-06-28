@@ -20,6 +20,7 @@ class UI {
         this.btn_play_again = document.getElementById("play_again");
         this.btn_back_to_menu = document.getElementsByName("back_menu");
         this.btn_reset_points = document.getElementById("configure-reset");
+        this.range_audio = document.getElementById("configure-music");
         UI.showUI(document.getElementById("canvas"), false);
         this.configureUI();
     }
@@ -31,6 +32,9 @@ class UI {
         this.btn_settings.onclick = () => {
             UI.showMenu("allthethings", "ui-settings");
         };
+        this.range_audio.oninput = (e) => {
+            SaveSystem_1.SaveSystem.save('volume', e.target.value);
+        };
         this.btn_credits.onclick = () => {
             UI.showMenu("allthethings", "ui-credits");
         };
@@ -40,7 +44,8 @@ class UI {
         };
         this.btn_reset_points.onclick = () => {
             const save_map = new Map([
-                ['points', '0']
+                ['points', '0'],
+                ['volume', '1']
             ]);
             SaveSystem_1.SaveSystem.saveArray(save_map);
             this.updateElementText(this.btn_reset_points, 'Reset highscore: ' + SaveSystem_1.SaveSystem.load('points'));

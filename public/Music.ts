@@ -1,3 +1,5 @@
+import { SaveSystem } from "../src/model/save/SaveSystem";
+
 export default class MusicPlayer {
     playing_music : HTMLAudioElement;
 
@@ -6,7 +8,8 @@ export default class MusicPlayer {
     }
     
     public play() : void {
-
+        const vol = Number(SaveSystem.load('volume'));
+        this.playing_music.volume = (vol == NaN ? 1 : vol)
         this.playing_music.play();
     }
 

@@ -20,6 +20,7 @@ export class UI{
 	// credits and settings menu
 	btn_back_to_menu : NodeListOf<HTMLElement>
 	btn_reset_points : HTMLElement
+	range_audio : HTMLElement
 
 	// lose screen
 	btn_play_again : HTMLElement
@@ -38,6 +39,8 @@ export class UI{
 		this.btn_back_to_menu = document.getElementsByName("back_menu")
 		this.btn_reset_points = document.getElementById("configure-reset")
 
+		this.range_audio = document.getElementById("configure-music")
+		
 		UI.showUI(document.getElementById("canvas"), false)
 		this.configureUI()
 	}
@@ -52,6 +55,10 @@ export class UI{
 			UI.showMenu("allthethings", "ui-settings")
 		}
 		
+		this.range_audio.oninput = (e) => {
+			SaveSystem.save('volume', (e.target as any).value as number)
+		}
+
 		this.btn_credits.onclick = () => {
 			UI.showMenu("allthethings", "ui-credits")
 		}
@@ -63,7 +70,8 @@ export class UI{
 		
 		this.btn_reset_points.onclick = () => {
 			const save_map = new Map([
-				['points', '0']
+				['points', '0'],
+				['volume', '1']
 			])
 			SaveSystem.saveArray(save_map)
 			this.updateElementText(this.btn_reset_points, 'Reset highscore: ' + SaveSystem.load('points'))
