@@ -13,7 +13,7 @@ var GameState;
     GameState[GameState["ui"] = 2] = "ui";
 })(GameState = exports.GameState || (exports.GameState = {}));
 class Game {
-    constructor(h, w) {
+    constructor(h, w, music) {
         this.height = h;
         this.width = w;
         this.canvas = document.createElement("canvas");
@@ -24,6 +24,7 @@ class Game {
         this.ctx = this.canvas.getContext("2d");
         document.body.appendChild(this.canvas);
         this.ctx.font = '50px serif';
+        this.music_player = music;
     }
     init_game() {
         this.ground_blocks = [new GroundBlocks_1.GroundBlock(this.ctx, 0, 240, 500, 20, "000")];
@@ -34,6 +35,7 @@ class Game {
         this._player = new Player_1.Player(this.ctx, new Controls_1.Controls());
         this.state = GameState.playing;
         this.points = 0;
+        this.music_player.play();
     }
     get player() {
         return this._player;
@@ -153,6 +155,7 @@ class Game {
             show_text += " é um novo record !";
         }
         document.getElementById('points').innerText = show_text;
+        this.music_player.stop();
     }
     roundUp(num, precision) {
         precision = Math.pow(10, precision);

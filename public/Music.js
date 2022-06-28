@@ -2,13 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class MusicPlayer {
     constructor() {
-        this.audio = new Audio('./music.wav');
+        this.playing_music = new Audio('./music.wav');
     }
     play() {
-        this.audio.play();
+        this.playing_music.play();
     }
     stop() {
-        this.audio.pause();
+        this.playing_music.pause();
     }
 }
 exports.default = MusicPlayer;

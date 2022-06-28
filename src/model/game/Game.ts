@@ -7,6 +7,7 @@ import { Controls } from '../controls/Controls';
 
 
 import { UI } from '../../../public/index'
+import MusicPlayer from '../../../public/Music';
 
 
 export enum GameState{
@@ -27,8 +28,9 @@ export class Game implements IDrawable{
     width: number;
     points : number;
     high_score : string;
+    music_player : MusicPlayer
 
-    constructor(h, w){
+    constructor(h : number, w : number, music : MusicPlayer){
         this.height = h
         this.width = w
         this.canvas = document.createElement("canvas");
@@ -41,6 +43,8 @@ export class Game implements IDrawable{
         this.ctx = this.canvas.getContext("2d")
         document.body.appendChild(this.canvas)
         this.ctx.font = '50px serif';
+
+        this.music_player = music
     }
     
 	public init_game() : void{
@@ -51,8 +55,10 @@ export class Game implements IDrawable{
         this.appendBlock(new GroundBlock( this.ctx, 570, 240 , 100, 20, "ABC"))
         this.obstacles = this.obstacles.concat(this.ground_blocks[1].obstacles)
 		this._player = new Player(this.ctx, new Controls());
+        
         this.state = GameState.playing
         this.points = 0
+        this.music_player.play();
 	}
 
     public get player()
@@ -198,7 +204,7 @@ export class Game implements IDrawable{
 			show_text += " é um novo record !"
 		}
 		document.getElementById('points').innerText = show_text
-		
+		this.music_player.stop()
 	}
 
     private roundUp(num : number, precision : number) : number{

@@ -106,7 +106,7 @@ export class UI{
 }
 
 let gm : Game
-gm = new Game(500, 500);
+gm = new Game(500, 500, new MusicPlayer());
 gm.state = GameState.playing
 let u = new UI();
 

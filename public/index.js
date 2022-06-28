@@ -8,6 +8,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UI = void 0;
 const Game_1 = require("../src/model/game/Game");
+const Music_1 = require("./Music");
 const SaveSystem_1 = require("../src/model/save/SaveSystem");
 class UI {
     constructor() {
@@ -76,7 +77,7 @@ class UI {
 }
 exports.UI = UI;
 let gm;
-gm = new Game_1.Game(500, 500);
+gm = new Game_1.Game(500, 500, new Music_1.default());
 gm.state = Game_1.GameState.playing;
 let u = new UI();
 function start() {

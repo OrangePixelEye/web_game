@@ -1,16 +1,18 @@
-export default abstract class MusicPlayer {
-    audio : HTMLAudioElement
-    
+export default class MusicPlayer {
+    playing_music : HTMLAudioElement;
+
     constructor(){
-        this.audio = new Audio('./music.wav');
+        this.playing_music = new Audio('./music.wav');
     }
     
     public play() : void {
-        this.audio.play();
+
+        this.playing_music.play();
     }
 
+    
     public stop() : void {
-        this.audio.pause()
+        this.playing_music.pause()
     }
 
 }
