@@ -9,6 +9,6 @@ Se for adicionar funcionalidades:
 
 ## todo
 - [x] colocar musica na tela do jogo
-- [ ] configurar volume da musica
+- [x] configurar volume da musica
 - [ ] colocar som no pulo
 - [ ] colocar musica no menu
