@@ -6,3 +6,9 @@ Quando for baixar lembra de usar:
 Se for adicionar funcionalidades:
 ```tsc -w``
 ```npx webpack serve``
+
+## todo
+- [ ] colocar musica
+- [ ] configurar volume da musica
+- [ ] colocar som no pulo
+- [ ] colocar musica no menu
