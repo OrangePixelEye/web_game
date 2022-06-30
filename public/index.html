@@ -39,7 +39,6 @@
 	</div>
 
 	<div id="game_over" style="display: none;">
-
 		<div class="gameover">
 			<p> GAME OVER</p>
 			<p id="points">100 points</p>
@@ -48,7 +47,7 @@
 		<div class="continue">
 			<p> CONTINUE? </p>
 		</div>
-
+		
 		<!-- Hover #3 -->
 		<div class="box-3">
 			<button id="play_again" class="btn_restart">Play Again</button>
@@ -58,12 +57,14 @@
 		</div>
 	</div>
 	<div id="ui-settings" style="display: none;">
-
 		<input type="range" id="configure-music" name="configure-music" min="0" max="1" value="0.3" step="0.1">
 		<label for="configure-music">Music</label>
-		<button id="configure-reset">Reset highscore:</button>
+		<br>
+		<button id="configure-reset" id="e">Reset highscore:</button>
+		<br>
 		<!-- talvez não vai dar para trocar -->
 		<button id="configure-input">Change jump button</button>
+		<br>
 		<button name="back_menu" data-screen="settings" >Back to menu</button>
 	</div>
 	<div id="ui-credits" style="display: none;">
