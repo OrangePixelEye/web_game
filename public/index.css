@@ -96,12 +96,6 @@ body {
     transform: rotate(-2deg);
 }
 
-#credits:hover {
-    background: #7A0000;
-    color: white;
-    -webkit-transform: rotate(-2deg);
-    transform: rotate(-2deg);
-}
 
 #options:hover {
     background: #7A0000;
@@ -121,7 +115,7 @@ body {
     top: -229px;
     right: 46px;
     border-top: 1px solid white;
-
+    
 }
 
 #right {
@@ -201,7 +195,14 @@ body {
     -webkit-transition: 0.5s;
     transition: 0.5s;
     cursor: pointer;
+    
+}
 
+#credits:hover {
+    background: #7A0000;
+    color: white;
+    -webkit-transform: rotate(-2deg);
+    transform: rotate(-2deg);
 }
 
 #credits p {
