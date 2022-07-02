@@ -9,7 +9,6 @@
 
 	<!-- todo: refactor the index css -->
 	<link rel="stylesheet" href="index.css">
-	<link rel="stylesheet" href="game_over.css">
 </head>
 
 <body>
@@ -33,28 +32,36 @@
 			<button class="btn_menu" id="e">EXIT</button>
 		</div>
 		<div id="right"></div>
-		<!-- 
-		<div id="exit"></div>
-		<div id="circle"></div> -->
 	</div>
 
 	<div id="game_over" style="display: none;">
-		<div class="gameover">
-			<p> GAME OVER</p>
-			<p id="points">100 points</p>
+
+		<div id="leftb"></div>
+
+		<div id="single-settings">
+			<label>
+				<h2>
+					GAME OVER
+				</h2>
+				<p id="points">
+					100 points
+				</p>
+			</label>
+		</div>
+		<br>
+		<br>
+		<br>
+		
+		<div id="single">
+			<button id="play_again" class="btn_menu">PLAY AGAIN</button>
+		</div>
+		<br>
+
+		<div id="single">
+			<button id="menu" class="btn_menu">EXIT</button>
 		</div>
 
-		<div class="continue">
-			<p> CONTINUE? </p>
-		</div>
-
-		<!-- Hover #3 -->
-		<div class="box-3">
-			<button id="play_again" class="btn_restart">Play Again</button>
-		</div>
-		<div class="box-3">
-			<button id="menu" class="btn_restart">Menu</button>
-		</div>
+		<div id="rightb"></div>
 	</div>
 	<div id="ui-settings" style="display: none;" class="things">
 
@@ -65,8 +72,8 @@
 					settings
 				</h2>
 			</label>
-			<!-- <button id="configure-input" class="btn_menu">Change jump button</button> -->
 		</div>
+		<br>
 		<div id="singles">
 
 			<label for="configure-music">Music</label>
@@ -80,7 +87,7 @@
 			</button>
 		</div>
 		<br>
-		<!-- talvez não vai dar para trocar -->
+		
 		<br>
 		<div id="single">
 			<button name="back_menu" class="btn_menu" data-screen="settings">Back to menu</button>
@@ -92,11 +99,11 @@
 		<div id="single-credits">
 			<p>
 				Desenvolvedores:<br>
-				Bruno   -><br>
-				Felipe   -><br>
+				Bruno -><br>
+				Felipe -><br>
 				Gustavo -><br>
 				Matheus -><br>
-				
+
 			</p>
 		</div>
 		<div id="single-btn">

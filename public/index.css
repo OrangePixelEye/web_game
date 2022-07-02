@@ -223,6 +223,20 @@ canvas {
     left: 32.5%;
 }
 
+#game_over{
+    width: 0px;
+    height: 0px;
+
+    border-left: 300px solid transparent;
+    border-right: 300px solid transparent;
+    border-top: 300px solid transparent;
+    border-radius: px;
+    position: absolute;
+    margin: auto;
+    top: 35%;
+    left: 32.5%;
+}
+
 #leftb {
     height: 50px;
     width: 365px;
@@ -318,7 +332,6 @@ canvas {
     -webkit-transform: rotate(-1deg);
     transform: rotate(-2deg);
 }
-
 
 /* slider */
 input[type=range] {
