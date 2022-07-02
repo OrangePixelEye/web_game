@@ -23,7 +23,7 @@ class Game {
         this.canvas.style.border = "1px solid #000";
         this.ctx = this.canvas.getContext("2d");
         document.body.appendChild(this.canvas);
-        this.ctx.font = '50px serif';
+        this.ctx.font = '35px serif';
         this.music_player = music;
     }
     init_game() {
@@ -137,10 +137,12 @@ class Game {
         }
     }
     showHighscore() {
-        this.ctx.fillText(this.high_score, 25, 100);
+        this.ctx.fillStyle = "orange";
+        this.ctx.fillText("HI:  " + this.high_score, 25, 40);
     }
     updateScreenPoints(points) {
-        this.ctx.fillText(points.toString(), 255, 100);
+        this.ctx.fillStyle = "orange";
+        this.ctx.fillText(points.toString(), 25, 90);
     }
     gameOver() {
         let show_text = this.points.toString();

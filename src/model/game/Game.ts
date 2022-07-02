@@ -42,7 +42,8 @@ export class Game implements IDrawable{
         
         this.ctx = this.canvas.getContext("2d")
         document.body.appendChild(this.canvas)
-        this.ctx.font = '50px serif';
+        this.ctx.font = '35px serif';
+    
 
         this.music_player = music
     }
@@ -182,11 +183,13 @@ export class Game implements IDrawable{
         }
     }
     public showHighscore() : void {
-        this.ctx.fillText(this.high_score, 25, 100)
+        this.ctx.fillStyle = "orange";
+        this.ctx.fillText("HI:  " + this.high_score, 25, 40)
     }
-
+    
     public updateScreenPoints(points : number) : void {
-        this.ctx.fillText(points.toString(), 255, 100)
+        this.ctx.fillStyle = "orange";
+        this.ctx.fillText(points.toString(), 25, 90)
     }
     
     private gameOver() : void {
