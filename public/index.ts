@@ -48,6 +48,9 @@ export class UI{
 	updateElementText(element : HTMLElement, n_value : string) : void {
 		element.innerText = n_value
 	}
+	updateElementRange(element : any, n_value : number) : void {
+		element.value = n_value
+	}
 
 	public configureUI() : void{
 		this.updateElementText(this.btn_reset_points, 'Reset highscore: ' + SaveSystem.load('points'))
@@ -74,6 +77,7 @@ export class UI{
 				['volume', '1']
 			])
 			SaveSystem.saveArray(save_map)
+			this.updateElementRange(document.getElementById('configure-music'), 0.5)
 			this.updateElementText(this.btn_reset_points, 'Reset highscore: ' + SaveSystem.load('points'))
 		}
 

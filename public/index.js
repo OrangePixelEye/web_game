@@ -27,6 +27,9 @@ class UI {
     updateElementText(element, n_value) {
         element.innerText = n_value;
     }
+    updateElementRange(element, n_value) {
+        element.value = n_value;
+    }
     configureUI() {
         this.updateElementText(this.btn_reset_points, 'Reset highscore: ' + SaveSystem_1.SaveSystem.load('points'));
         this.btn_settings.onclick = () => {
@@ -48,6 +51,7 @@ class UI {
                 ['volume', '1']
             ]);
             SaveSystem_1.SaveSystem.saveArray(save_map);
+            this.updateElementRange(document.getElementById('configure-music'), 0.5);
             this.updateElementText(this.btn_reset_points, 'Reset highscore: ' + SaveSystem_1.SaveSystem.load('points'));
         };
         this.btn_play_again.onclick = () => {
