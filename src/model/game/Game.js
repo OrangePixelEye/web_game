@@ -10,10 +10,12 @@ var GameState;
 (function (GameState) {
     GameState[GameState["playing"] = 0] = "playing";
     GameState[GameState["lose"] = 1] = "lose";
-    GameState[GameState["ui"] = 2] = "ui";
 })(GameState = exports.GameState || (exports.GameState = {}));
 class Game {
     constructor(h, w, music) {
+        this.appendBlock = (b) => this.ground_blocks.push(b);
+        this.main = () => this.run();
+        this.calculatePoints = () => this.roundUp(this.points / 90, 2);
         this.height = h;
         this.width = w;
         this.canvas = document.createElement("canvas");
@@ -86,9 +88,6 @@ class Game {
                 this.state = GameState.lose;
         });
     }
-    appendBlock(b) {
-        this.ground_blocks.push(b);
-    }
     draw_background() {
         this.ctx.fillStyle = "#101EF2";
         this.ctx.fillRect(0, 0, 500, 500);
@@ -104,9 +103,6 @@ class Game {
             element.draw();
         });
     }
-    main() {
-        this.run();
-    }
     run() {
         if (this.state != GameState.playing)
             return;
@@ -115,9 +111,6 @@ class Game {
         this.drawUI(this.state);
         // cria o loop
         window.requestAnimationFrame(() => this.run());
-    }
-    calculatePoints() {
-        return this.roundUp(this.points / 90, 2);
     }
     // todo
     drawUI(state) {
@@ -128,9 +121,6 @@ class Game {
                 break;
             case GameState.lose:
                 this.gameOver();
-                break;
-            case GameState.ui:
-                // não sei '-'
                 break;
             default:
                 throw "Undefined status";
@@ -148,9 +138,7 @@ class Game {
         let show_text = this.points.toString();
         // pause game
         window.cancelAnimationFrame(0);
-        // todo: show lose screen
-        index_1.UI.showUI(document.getElementById("game_over"), true);
-        index_1.UI.showUI(document.getElementById("canvas"), false);
+        index_1.UI.showMenu("canvas", "game_over");
         // show info
         if (Number(SaveSystem_1.SaveSystem.load("points")) < this.points) {
             SaveSystem_1.SaveSystem.save("points", this.points);

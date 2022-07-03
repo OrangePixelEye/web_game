@@ -13,7 +13,6 @@ import MusicPlayer from '../../../public/Music';
 export enum GameState{
     playing,
     lose,
-    ui,
 }
 
 
@@ -43,7 +42,6 @@ export class Game implements IDrawable{
         this.ctx = this.canvas.getContext("2d")
         document.body.appendChild(this.canvas)
         this.ctx.font = '35px serif';
-    
 
         this.music_player = music
     }
@@ -121,10 +119,8 @@ export class Game implements IDrawable{
         });
     }
 
-    appendBlock(b : GroundBlock)
-    {
-        this.ground_blocks.push(b)
-    }
+    appendBlock = (b : GroundBlock) => this.ground_blocks.push(b)
+    
 
     private draw_background() : void {
         this.ctx.fillStyle =  "#101EF2"
@@ -146,10 +142,8 @@ export class Game implements IDrawable{
         });
     }
 
-    public main() : void
-    {
-        this.run();
-    }
+    main = () : void => this.run();
+
 
     public run() : void
     {
@@ -161,9 +155,8 @@ export class Game implements IDrawable{
         window.requestAnimationFrame(() => this.run())
     }
 
-    public calculatePoints() : number{  
-        return this.roundUp(this.points/90, 2)
-    }
+    calculatePoints = () : number => this.roundUp(this.points/90, 2)
+    
 
     // todo
     public drawUI(state : GameState) : void{
@@ -175,9 +168,6 @@ export class Game implements IDrawable{
             case GameState.lose:
                 this.gameOver();
                 break;
-            case GameState.ui:
-                // não sei '-'
-                break
             default:
                 throw "Undefined status"
         }
@@ -197,11 +187,9 @@ export class Game implements IDrawable{
 		// pause game
 		window.cancelAnimationFrame(0)
 		
-        // todo: show lose screen
-		UI.showUI(document.getElementById("game_over"), true)
-		UI.showUI(document.getElementById("canvas"), false)
+        UI.showMenu("canvas","game_over");
 		
-		// show info
+        // show info
 		if(Number(SaveSystem.load("points")) < this.points){
 			SaveSystem.save("points", this.points)
 			show_text += " é um novo record !"
