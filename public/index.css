@@ -29,6 +29,12 @@ body {
     transform: rotate(-2deg);
 }
 
+
+#single p {
+    position: relative;
+    top: 2px;
+    right: 4px;
+}
 #multiplayer:hover {
     background: #7A0000;
     color: white;
@@ -70,12 +76,6 @@ body {
     z-index: 7;
     left: 46px;
     border-top: 1px solid white;
-}
-
-#single p {
-    position: relative;
-    top: 2px;
-    right: 4px;
 }
 
 #multiplayer {
@@ -237,7 +237,7 @@ canvas {
     left: 32.5%;
 }
 
-#leftb {
+#left-bar {
     height: 50px;
     width: 365px;
     background: orange;
@@ -251,7 +251,7 @@ canvas {
 
 }
 
-#rightb {
+#right-bar {
     height: 50px;
     width: 365px;
     background: orange;
