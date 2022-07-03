@@ -22,6 +22,9 @@ export class UI{
 	btn_reset_points : HTMLElement
 	range_audio : HTMLElement
 
+	// controls
+	btn_controls : HTMLElement
+
 	// lose screen
 	btn_play_again : HTMLElement
 	btn_menu : HTMLElement
@@ -41,6 +44,8 @@ export class UI{
 
 		this.range_audio = document.getElementById("configure-music")
 		
+		this.btn_controls = document.getElementById("controls-start")
+
 		UI.showUI(document.getElementById("canvas"), false)
 		this.configureUI()
 	}
@@ -67,6 +72,11 @@ export class UI{
 		}
 		
 		this.btn_play.onclick = () => {
+			if(SaveSystem.load('first') === ''){
+				SaveSystem.save('first', 'no')
+				UI.showMenu('allthethings', 'ui-controls')
+				return;
+			}
 			UI.showMenu("allthethings", "canvas")
 			start()
 		};
@@ -74,7 +84,9 @@ export class UI{
 		this.btn_reset_points.onclick = () => {
 			const save_map = new Map([
 				['points', '0'],
-				['volume', '1']
+				['volume', '1'],
+				['first', ''],
+				
 			])
 			SaveSystem.saveArray(save_map)
 			this.updateElementRange(document.getElementById('configure-music'), 0.5)
@@ -88,6 +100,11 @@ export class UI{
 
 		this.btn_menu.onclick = () => {
 			UI.showMenu("game_over", "allthethings")
+		}
+
+		this.btn_controls.onclick = () => {
+			UI.showMenu("ui-controls", "canvas")
+			start()
 		}
 		
 		this.btn_exit.onclick = () => {
@@ -123,6 +140,7 @@ gm.state = GameState.playing
 let u = new UI();
 
 function start() : void{
+	
 	gm.init_game()
 	gm.main()
 }
