@@ -10,7 +10,7 @@ Se for adicionar funcionalidades:
 ## todo
 - [x] colocar musica na tela do jogo
 - [x] configurar volume da musica
-- [ ] estilo na pagina de configuração
-- [ ] estilo na pag de creditos
+- [x] estilo na pagina de configuração
+- [x] estilo na pag de creditos
 - [ ] colocar som no pulo
 - [ ] colocar musica no menu
