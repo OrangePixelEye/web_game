@@ -22,7 +22,7 @@ class Player {
         this.getInput();
     }
     draw() {
-        this.ctx.fillStyle = "#FA43D6";
+        this.ctx.fillStyle = "orange";
         this.ctx.fillRect(this.x, this.y, this.width, this.height);
     }
     jump() {

@@ -32,7 +32,7 @@ export class Player implements IDrawable{
 		this.getInput();
     }
     draw() : void {
-        this.ctx.fillStyle = "#FA43D6"
+        this.ctx.fillStyle = "orange"
         this.ctx.fillRect(this.x,this.y, this.width, this.height)
     }
     
