@@ -29,7 +29,7 @@ class Game {
         this.music_player = music;
     }
     init_game() {
-        this.ground_blocks = [new GroundBlocks_1.GroundBlock(this.ctx, 0, 240, 500, 20, "000")];
+        this.ground_blocks = [new GroundBlocks_1.GroundBlock(this.ctx, 0, 240, 500, 20, "ABC")];
         this.high_score = SaveSystem_1.SaveSystem.load("points");
         this.obstacles = this.ground_blocks[0].obstacles;
         this.appendBlock(new GroundBlocks_1.GroundBlock(this.ctx, 570, 240, 100, 20, "ABC"));

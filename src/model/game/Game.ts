@@ -47,7 +47,7 @@ export class Game implements IDrawable{
     }
     
 	public init_game() : void{
-        this.ground_blocks = [new GroundBlock(this.ctx, 0, 240, 500, 20,"000")]
+        this.ground_blocks = [new GroundBlock(this.ctx, 0, 240, 500, 20,"ABC")]
         this.high_score = SaveSystem.load("points")
         this.obstacles = this.ground_blocks[0].obstacles;
         

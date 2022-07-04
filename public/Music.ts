@@ -10,6 +10,7 @@ export default class MusicPlayer {
     public play() : void {
         const vol = Number(SaveSystem.load('volume'));
         this.playing_music.volume = (vol == NaN ? 1 : vol)
+        this.playing_music.loop = true
         this.playing_music.play();
     }
 
