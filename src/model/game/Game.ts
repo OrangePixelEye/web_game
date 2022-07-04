@@ -28,6 +28,7 @@ export class Game implements IDrawable{
     points : number;
     high_score : string;
     music_player : MusicPlayer
+    bg : CanvasImageSource
 
     constructor(h : number, w : number, music : MusicPlayer){
         this.height = h
@@ -44,6 +45,8 @@ export class Game implements IDrawable{
         this.ctx.font = '35px serif';
 
         this.music_player = music
+
+        this.bg = document.getElementById("bg") as CanvasImageSource
     }
     
 	public init_game() : void{
@@ -123,8 +126,9 @@ export class Game implements IDrawable{
     
 
     private draw_background() : void {
-        this.ctx.fillStyle =  "#101EF2"
-        this.ctx.fillRect(0, 0, 500, 500)
+        //this.ctx.fillStyle =  "#101EF2"
+        //this.ctx.fillRect(0, 0, 500, 500)
+        this.ctx.drawImage(this.bg, 0, 0, 500, 500)
     }
 
     draw() : void {

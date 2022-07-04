@@ -27,6 +27,7 @@ class Game {
         document.body.appendChild(this.canvas);
         this.ctx.font = '35px serif';
         this.music_player = music;
+        this.bg = document.getElementById("bg");
     }
     init_game() {
         this.ground_blocks = [new GroundBlocks_1.GroundBlock(this.ctx, 0, 240, 500, 20, "ABC")];
@@ -89,8 +90,9 @@ class Game {
         });
     }
     draw_background() {
-        this.ctx.fillStyle = "#101EF2";
-        this.ctx.fillRect(0, 0, 500, 500);
+        //this.ctx.fillStyle =  "#101EF2"
+        //this.ctx.fillRect(0, 0, 500, 500)
+        this.ctx.drawImage(this.bg, 0, 0, 500, 500);
     }
     draw() {
         this.draw_background();
