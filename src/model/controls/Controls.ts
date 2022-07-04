@@ -3,8 +3,8 @@ export class Controls{
     public states : any;
 
     constructor(){
-        this.codes  = { 37: 'left', 38: 'forward', 40: 'backward' };
-        this.states = { 'left': false, 'forward': false, 'backward': false };
+        this.codes  = { 37: 'left', 32: 'forward' };
+        this.states = { 'left': false, 'forward': false };
         document.addEventListener('keydown', this.onKey.bind(this, true), false);
         document.addEventListener('keyup', this.onKey.bind(this, false), false);
     }

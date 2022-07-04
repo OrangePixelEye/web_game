@@ -36,8 +36,7 @@ class Player {
     getInput() {
         if (this.controls.states.forward)
             this.jump();
-        if (this.controls.states.left)
-            this.invert();
+        //if (this.controls.states.left) this.invert();
     }
     calcGravity() {
         this.vertical_speed += this.gravity;
