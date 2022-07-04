@@ -17,7 +17,10 @@ export class GroundBlock extends MoveableDrawable{
     // todo: fix this functon
     private generateRandomObstacles() : void{		
 		let obs_ = Math.floor(Math.random() * 1) + 1;
-        this.obs = [new Obstacles(this.ctx, (Math.floor(Math.random() * 13) + this.x + 45), this.y + 10, 13, 15, "FFF",this.speed)]
+        this.obs = [new Obstacles(this.ctx, 
+                    (Math.floor(Math.random() * 13) + this.x + 45), 
+                    this.y + 10, 
+                    13, 15, "FFF",this.speed)];
         /*
         for(let i = 0; i <  obs_; i++)
         {
