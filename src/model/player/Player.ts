@@ -48,7 +48,7 @@ export class Player implements IDrawable{
 
     private getInput() : void {
         if (this.controls.states.forward) this.jump();
-        if (this.controls.states.left) this.invert();
+        //if (this.controls.states.left) this.invert();
     }
 
     private calcGravity() : void {
