@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const path = require('path');
 const config = {
-    entry: "./public/index.js",
+    entry: "./docs/index.js",
     module: {
         rules: [
             {
@@ -21,22 +21,22 @@ const config = {
         extensions: [".ts", ".js"],
     },
     output: {
-        path: path.resolve(__dirname, "public"),
+        path: path.resolve(__dirname, "docs"),
         filename: "bundle.js",
     }
 };
 module.exports = {
     mode: 'development',
     entry: {
-        index: './public/index.js',
+        index: './docs/index.js',
     },
     output: {
         filename: '[name].bundle.js',
-        path: path.resolve(__dirname, 'public'),
+        path: path.resolve(__dirname, 'docs'),
     },
     devServer: {
         static: {
-            directory: path.join(__dirname, 'public'),
+            directory: path.join(__dirname, 'docs'),
         },
         compress: true,
         port: 3001,

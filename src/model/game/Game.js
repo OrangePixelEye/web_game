@@ -5,7 +5,7 @@ const SaveSystem_1 = require("../save/SaveSystem");
 const Player_1 = require("../player/Player");
 const GroundBlocks_1 = require("../ground_blocks/GroundBlocks");
 const Controls_1 = require("../controls/Controls");
-const index_1 = require("../../../public/index");
+const index_1 = require("../../../docs/index");
 var GameState;
 (function (GameState) {
     GameState[GameState["playing"] = 0] = "playing";

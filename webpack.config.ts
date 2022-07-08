@@ -2,7 +2,7 @@
 import type { Configuration } from "webpack";
 const path = require('path');
 const config: Configuration = {
-  entry: "./public/index.js",
+  entry: "./docs/index.js",
   module: {
     rules: [
       {
@@ -21,7 +21,7 @@ const config: Configuration = {
     extensions: [".ts", ".js"],
   },
   output: {
-    path: path.resolve(__dirname, "public"),
+    path: path.resolve(__dirname, "docs"),
     filename: "bundle.js",
   }
 };
@@ -29,15 +29,15 @@ const config: Configuration = {
 module.exports = {
   mode: 'development',
   entry: {
-    index: './public/index.js',
+    index: './docs/index.js',
   },
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'public'),
+    path: path.resolve(__dirname, 'docs'),
   },
   devServer: {
     static: {
-      directory: path.join(__dirname, 'public'),
+      directory: path.join(__dirname, 'docs'),
     },
     compress: true,
     port: 3001,

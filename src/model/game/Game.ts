@@ -6,8 +6,8 @@ import { GroundBlock } from '../ground_blocks/GroundBlocks';
 import { Controls } from '../controls/Controls';
 
 
-import { UI } from '../../../public/index'
-import MusicPlayer from '../../../public/Music';
+import { UI } from '../../../docs/index'
+import MusicPlayer from '../../../docs/Music';
 
 
 export enum GameState{
